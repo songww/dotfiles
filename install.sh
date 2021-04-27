@@ -23,6 +23,6 @@ brew install homebrew/cask-fonts/font-cascadia-code \
              homebrew/cask-fonts/font-cascadia-mono \
              homebrew/cask-fonts/font-cascadia-mono-pl
 
-ln -s tmux.conf $HOME/.tmux.conf
+ln -sf tmux.conf $HOME/.tmux.conf
 
-ln -s alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -sf alacritty.yml $HOME/.config/alacritty/alacritty.yml
