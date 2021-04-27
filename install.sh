@@ -1,5 +1,5 @@
 brew install antigen alacritty aria2 \
-    bat bazel bottom \
+    bat bazel \
     cmake \
     dust \
     eslint exa \
@@ -9,7 +9,7 @@ brew install antigen alacritty aria2 \
     jq jsonlint \
     llvm \
     make mycli mysql-client \
-    note \
+    node \
     openjdk \
     p7zip procs python \
     reattach-to-user-namespace ripgrep \
@@ -23,6 +23,12 @@ brew install homebrew/cask-fonts/font-cascadia-code \
              homebrew/cask-fonts/font-cascadia-mono \
              homebrew/cask-fonts/font-cascadia-mono-pl
 
-ln -sf tmux.conf $HOME/.tmux.conf
+ln -sf `pwd`/tmux.conf $HOME/.tmux.conf
 
-ln -sf alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -sf `pwd`/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+
+git clone https://github.com/tmux-plugins/tpm \
+    $HOME/.tmux/plugins/tpm
+
+# install plugins
+bash $HOME/.tmux/plugins/tpm/bin/install_plugins
