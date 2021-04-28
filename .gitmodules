@@ -1,0 +1,6 @@
+[submodule "dotzsh"]
+	path = dotzsh
+	url = https://github.com/songww/dotzsh
+[submodule "dotvim"]
+	path = dotvim
+	url = https://github.com/songww/dotvim
