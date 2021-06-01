@@ -111,7 +111,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: "Cascadia Code PL"
+    family: "Cascadia Code Light"
 
     # The `style` can be specified to pick a specific face.
     style: Light
@@ -122,7 +122,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Cascadia Code PL"
+    family: "Cascadia Code Light"
 
     # The `style` can be specified to pick a specific face.
     style: SemiLight
@@ -133,7 +133,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Cascadia Code PL"
+    family: "Cascadia Code Italic"
 
     # The `style` can be specified to pick a specific face.
     #style: Italic
@@ -144,10 +144,10 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Cascadia Code PL"
+    family: "Cascadia Code"
 
     # The `style` can be specified to pick a specific face.
-    #style: Bold Italic
+    style: Normal
 
   # Point size
   size: 16.0
