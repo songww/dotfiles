@@ -111,7 +111,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: "Cascadia Code PL"
+    family: "Cascadia Code"
 
     # The `style` can be specified to pick a specific face.
     style: "ExtraLight Italic"
@@ -122,7 +122,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Cascadia Code PL"
+    family: "Cascadia Code"
 
     # The `style` can be specified to pick a specific face.
     style: SemiLight
@@ -133,7 +133,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Cascadia Code PL"
+    family: "Cascadia Code"
 
     # The `style` can be specified to pick a specific face.
     style: "Light Italic"
@@ -144,7 +144,7 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Cascadia Code PL"
+    family: "Cascadia Code"
 
     # The `style` can be specified to pick a specific face.
     style: "SemiLight Italic"
@@ -230,7 +230,7 @@ draw_bold_text_with_bright_colors: true
 
   # Keyboard regex hints
   #hints:
-    # Fist character in the hint label
+    # First character in the hint label
     #
     # Allowed values are CellForeground/CellBackground, which reference the
     # affected cell, or hexadecimal colors like #ff00ff.
