@@ -3,8 +3,13 @@ require("nvim-treesitter.install").command_extra_args = {
   curl = { "--proxy", "http://127.0.0.1:1087" },
 }
 
+-- vim.o.guifont = "Monaco, Symbols Nerd Font Mono Light 12"
+-- vim.o.guifont = "Hurmit Nerd Font Mono 12"
+-- vim.o.guifont = "Cascadia Code Light:h12"
+vim.o.guifont = "Cascadia Code, Symbols Nerd Font Light:h12"
+
 if vim.fn.exists("neovide") then
-  vim.o.guifont = "Cascadia Code Light,Symbols Nerd Font:h11"
+  -- vim.o.guifont = "Cascadia Code Light 11,Symbols Nerd Font 11"
   -- " Ctrl-ScrollWheel for zooming in/out
   --nnoremap <silent> <C-ScrollWheelUp> :set guifont=+<CR>
   --nnoremap <silent> <C-ScrollWheelDown> :set guifont=-<CR>
@@ -80,7 +85,7 @@ lvim.builtin.which_key.mappings["t"] = {
   w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
 }
 
--- TODO: User Config for predefined plugins
+--User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.dap.active = true
 lvim.builtin.notify.active = true
@@ -129,15 +134,49 @@ lvim.lsp.automatic_servers_installation = false
 -- See the full default list `:lua print(vim.inspect(lvim.lsp.override))`
 vim.list_extend(lvim.lsp.override, { "rust" })
 
+vim.list_extend(lvim.lsp.override, { "clangd" })
+
+-- some settings can only passed as commandline flags `clangd --help`
+local clangd_flags = {
+  "--all-scopes-completion",
+  "--suggest-missing-includes",
+  "--background-index",
+  "--pch-storage=disk",
+  "--cross-file-rename",
+  "--log=info",
+  "--completion-style=detailed",
+  "--enable-config", -- clangd 11+ supports reading from .clangd configuration file
+  "--clang-tidy",
+  -- "--clang-tidy-checks=-*,llvm-*,clang-analyzer-*,modernize-*,-modernize-use-trailing-return-type",
+  -- "--fallback-style=Google",
+  -- "--header-insertion=never",
+  -- "--query-driver=<list-of-white-listed-complers>"
+}
+
+local clangd_bin = "clangd"
+
+local custom_on_attach = function(client, bufnr)
+  require("lvim.lsp").common_on_attach(client, bufnr)
+  local opts = { noremap = true, silent = true }
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>lh", "<Cmd>ClangdSwitchSourceHeader<CR>", opts)
+end
+
+local clangd_opts = {
+  cmd = { clangd_bin, unpack(clangd_flags) },
+  on_attach = custom_on_attach,
+}
+
+require("lvim.lsp.manager").setup("clangd", clangd_opts)
+
 vim.list_extend(lvim.lsp.override, { "pyright" })
 
 ---@usage setup a server -- see: https://www.lunarvim.org/languages/#overriding-the-default-configuration
-local opts = {} -- check the lspconfig documentation for a list of all possible options
-require("lvim.lsp.manager").setup("pyright", opts)
+local pyright_opts = {} -- check the lspconfig documentation for a list of all possible options
+require("lvim.lsp.manager").setup("pyright", pyright_opts)
 
 -- you can set a custom on_attach function that will be used for all the language servers
 -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
-lvim.lsp.on_attach_callback = function(_client, bufnr)
+lvim.lsp.on_attach_callback = function(_, bufnr)
   local function buf_set_option(...)
     vim.api.nvim_buf_set_option(bufnr, ...)
   end
@@ -445,38 +484,15 @@ lvim.plugins = {
     event = "VimEnter",
   },
   {
-    'karb94/neoscroll.nvim',
-    event = "VimEnter",
-    config = function ()
-      --local config = require("neoscroll.config")
-      --config.easing_functions.insert("outback", function (x)
-      --  local c1 = 1.70158;
-      --  local c3 = c1 + 1;
-
-      --  return 1 + c3 * math.pow(x - 1, 3) + c1 * math.pow(x - 1, 2);
-      --end)
-      --config.easing_functions.insert("elastic", function (x)
-      --  local c4 = (2 * math.pi) / 3;
-
-      --  if x == 0 then
-      --    return 0
-      --  elseif x == 1 then return 1
-      --  else
-      --    return math.pow(2, -10 * x) * math.sin((x * 10 - 0.75) * c4) + 1;
-      --  end
-      --end)
-      require('neoscroll').setup({
-        easing_function = "quintic"
-      })
-    end
-  },
-  {
     "McAuleyPenney/tidy.nvim",
     event = "BufWritePre"
   },
   {
-    'h-hg/fcitx.nvim',
-    event = "VimEnter"
+    "lilydjwg/fcitx.vim",
+    event = "BufReadPost",
+    config = function ()
+      vim.g.fcitx_remote = "/usr/bin/fcitx5-remote"
+    end
   },
   {
     "beauwilliams/focus.nvim",
@@ -500,13 +516,13 @@ lvim.plugins = {
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 lvim.autocommands.custom_groups = {
-  { "BufWinEnter", "*.lua", "setlocal ts=2 sw=2" },
-  -- { "VimEnter", "*", "startinsert | stopinsert" },
-  -- { "VimEnter", "*", "normal! :startinsert :stopinsert" },
-  -- { "VimEnter", "*", ":normal :startinsert :stopinsert" },
-  -- { "VimEnter", "*", "redraw!" },
-  -- { "VimEnter", "*", [[ silent !echo -ne "\e[2 q" ]] },
-  -- { "VimLeave", "*", [[ silent !echo -ne "\e[6 q" ]] },
+  { "BufEnter", "*.lua", "setlocal ts=2 sw=2" },
+  { "VimEnter", "*", "startinsert | stopinsert" },
+  { "VimEnter", "*", "normal! :startinsert :stopinsert" },
+  { "VimEnter", "*", ":normal :startinsert :stopinsert" },
+  { "VimEnter", "*", "redraw!" },
+  { "VimEnter", "*", [[ silent !echo -ne "\e[2 q" ]] },
+  { "VimLeave", "*", [[ silent !echo -ne "\e[6 q" ]] },
 }
 
 vim.opt.completeopt = { "menuone", "preview" }
@@ -526,11 +542,11 @@ vim.opt.splitbelow = true -- force all horizontal splits to go below current win
 vim.opt.splitright = true -- force all vertical splits to go to the right of current window
 vim.opt.swapfile = true -- creates a swapfile
 vim.opt.termguicolors = true -- set term gui colors (most terminals support this)
-vim.opt.timeoutlen = 400 -- time to wait for a mapped sequence to complete (in milliseconds)
+vim.opt.timeoutlen = 100 -- time to wait for a mapped sequence to complete (in milliseconds)
 vim.opt.title = true -- set the title of window to the value of the titlestring
-vim.opt.titlestring = "%<%F%=%l/%L - nvim" -- what the title of the window will be set to
-vim.opt.undodir = vim.fn.stdpath "cache" .. "/undo"
-vim.opt.undofile = true -- enable persistent undo
+-- vim.opt.titlestring = "%<%F%=%l/%L - nvim" -- what the title of the window will be set to
+-- vim.opt.undodir = vim.fn.stdpath "cache" .. "/undo"
+vim.opt.undofile = false -- enable persistent undo
 vim.opt.updatetime = 300 -- faster completion
 vim.opt.writebackup = false -- if a file is being edited by another program (or was written to file while editing with another program) it is not allowed to be edited
 vim.opt.expandtab = true -- convert tabs to spaces
@@ -538,7 +554,7 @@ vim.opt.shiftwidth = 4 -- the number of spaces inserted for each indentation
 vim.opt.tabstop = 4 -- insert 2 spaces for a tab
 vim.opt.cursorline = true -- highlight the current line
 vim.opt.number = true -- set numbered lines
-vim.opt.relativenumber = false -- set relative numbered lines
+vim.opt.relativenumber = true -- set relative numbered lines
 vim.opt.numberwidth = 4 -- set number column width to 2 {default 4}
 vim.opt.signcolumn = "yes" -- always show the sign column otherwise it would shift the text each time
 vim.opt.wrap = false -- display lines as one long line
