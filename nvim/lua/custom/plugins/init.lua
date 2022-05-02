@@ -2,6 +2,12 @@ return {
   ["goolord/alpha-nvim"] = {
     disable = false,
   },
+  ['akinsho/bufferline.nvim'] = {
+    tag = "v2.*",
+    requires = {
+      { 'kyazdani42/nvim-web-devicons', opt = true }
+    }
+  },
   ["numToStr/Comment.nvim"] = {
     event = "BufReadPost",
     requires = {
