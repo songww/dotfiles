@@ -26,6 +26,13 @@ return {
       { "p00f/nvim-ts-rainbow", opt = true },
     }
   },
+  ["lewis6991/gitsigns.nvim"] = {
+    after = { "folke/which-key.nvim" },
+    config = function()
+      local cfgs = require("custom.plugins.configs.gitsigns")
+      require("gitsigns").setup(cfgs)
+    end,
+  },
 
   ["farmergreg/vim-lastplace"] = {
     event = "BufReadPre",
@@ -41,7 +48,6 @@ return {
       { "nvim-lua/plenary.nvim", opt = true },
       { "MunifTanjim/nui.nvim", opt = true }
     },
-    -- event = "BufReadPost",
     cmd = { 'Neotree' },
     setup = function()
       -- Unless you are still migrating, remove the deprecated commands from v1.x
@@ -381,7 +387,8 @@ return {
     end
   },
   ['saecki/crates.nvim'] = {
-    event = "BufRead Cargo.toml",
+    event = { "BufRead Cargo.toml" },
+    requires = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('crates').setup()
     end,

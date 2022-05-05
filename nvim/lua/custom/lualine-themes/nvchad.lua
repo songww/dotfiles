@@ -33,7 +33,7 @@ if not present1 then
 end
 
 -- Colors
-local colors = require("colors").get()
+local colors = require("base16").get_colors("base_30")
 
 -- Config
 local config = {

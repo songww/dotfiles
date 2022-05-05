@@ -9,4 +9,5 @@ local map = require("core.utils").map
 map("n", "<leader>cc", ":Telescope <CR>")
 map("n", "<leader>q", ":q <CR>")
 
--- require("my autocmds file") or just declare them here
+-- AUTOCMDS
+require("custom.autocmds")
