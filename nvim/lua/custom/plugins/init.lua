@@ -1,7 +1,4 @@
 return {
-  ["goolord/alpha-nvim"] = {
-    disable = false,
-  },
   ['akinsho/bufferline.nvim'] = {
     tag = "v2.*",
     requires = {
@@ -27,7 +24,12 @@ return {
     }
   },
   ["lewis6991/gitsigns.nvim"] = {
-    after = { "folke/which-key.nvim" },
+    -- after = { "folke/which-key.nvim" },
+    opt = true,
+    module = "gitsigns",
+    setup = function()
+      require("core.utils").packer_lazy_load "gitsigns.nvim"
+    end,
     config = function()
       local cfgs = require("custom.plugins.configs.gitsigns")
       require("gitsigns").setup(cfgs)
