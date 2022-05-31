@@ -1,6 +1,6 @@
 vim.api.nvim_create_autocmd(
   "BufReadPost",
-  { pattern = "Cargo.toml", command = "set tabstop=4 shiftwidth=4" }
+  { pattern = "Cargo.toml", command = "set expandtab tabstop=4 shiftwidth=4 softtabstop=4" }
 )
 
 -- vim.api.nvim_create_autocmd(

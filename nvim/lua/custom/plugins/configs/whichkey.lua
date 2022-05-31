@@ -67,23 +67,4 @@ M.commands = {
   { ':PackerStatus', description = "packer status" },
 }
 
-M.keymaps = {
-  n = {
-    ["<leader>pk"] = { [[ <cmd>lua require('legendary').find('keymaps')<CR> ]], "legendary - search keymaps" },
-    ["<leader>pc"] = { [[ <cmd>lua require('legendary').find('commands')<CR> ]], "legendary - search commands" },
-    ["<leader>pa"] = { [[ <cmd>lua require('legendary').find('autocmds')<CR> ]], "legendary - search autocmds" },
-  },
-
-  v = {
-  },
-
-  o = {
-    -- Text object
-  },
-
-  x = {
-    -- Text object
-  }
-}
-
 return M

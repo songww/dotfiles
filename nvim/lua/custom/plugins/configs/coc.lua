@@ -22,36 +22,27 @@ M.setup = function()
   vim.g.coc_status_error_sign = ''
   vim.g.coc_status_warning_sign = ''
 
-  -- json comments highlight
-  vim.api.nvim_create_autocmd("Filetype", {
-    pattern = "json",
-    command = "syntax match Comment +//.+$+"
-  })
-  --vim.cmd [[
-  --  autocmd FileType json syntax match Comment +\/\/.\+$+
-  --]]
-
   vim.cmd [[
-        " Use tab for trigger completion with characters ahead and navigate.
-        " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-        " other plugin before putting this into your config.
-        inoremap <silent><expr> <TAB>
-              \ pumvisible() ? "\<C-n>" :
-              \ Helper_check_backspace() ? "\<TAB>" :
-              \ coc#refresh()
-        inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-        "inoremap <silent><expr> <TAB>
-        "  \ pumvisible() ? coc#_select_confirm() :
-        "  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-        "  \ Helper_check_backspace() ? "\<TAB>" :
-        "  \ coc#refresh()
-      
-        function! Helper_check_backspace() abort
-          let col = col('.') - 1
-          return !col || getline('.')[col - 1]  =~# '\s'
-        endfunction
-        
-      ]]
+    " Use tab for trigger completion with characters ahead and navigate.
+    " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+    " other plugin before putting this into your config.
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ Helper_check_backspace() ? "\<TAB>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    "inoremap <silent><expr> <TAB>
+    "  \ pumvisible() ? coc#_select_confirm() :
+    "  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+    "  \ Helper_check_backspace() ? "\<TAB>" :
+    "  \ coc#refresh()
+    
+    function! Helper_check_backspace() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+    
+  ]]
 
   vim.g.coc_snippet_next = '<Tab>'
 
@@ -76,79 +67,106 @@ M.setup = function()
   vim.keymap.set("i", "<C-p>", "coc#refresh()", { expr = true, silent = true, noremap = true })
 
   vim.cmd [[
-        " Use `[g` and `]g` to navigate diagnostics
-        " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-        nmap <silent> [g <Plug>(coc-diagnostic-prev)
-        nmap <silent> ]g <Plug>(coc-diagnostic-next)
+    " Use `[g` and `]g` to navigate diagnostics
+    " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-        " GoTo code navigation.
-        nmap <silent> gd <Plug>(coc-definition)
-        nmap <silent> gD <Plug>(coc-type-definition)
-        nmap <silent> gI <Plug>(coc-implementation)
-        nmap <silent> gr <Plug>(coc-references)
+    " GoTo code navigation.
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gD <Plug>(coc-type-definition)
+    nmap <silent> gI <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
 
-        " Use K to show documentation in preview window.
-        nnoremap <silent> K :call Helper_show_documentation()<CR>
+    " Use K to show documentation in preview window.
+    nnoremap <silent> K :call Helper_show_documentation()<CR>
 
-        function! Helper_show_documentation()
-          if (index(['vim','help'], &filetype) >= 0)
-            execute 'h '.expand('<cword>')
-          elseif (coc#rpc#ready())
-            call CocActionAsync('doHover')
-          else
-            execute '!' . &keywordprg . " " . expand('<cword>')
-          endif
-        endfunction
+    function! Helper_show_documentation()
+      if CocAction('hasProvider', 'hover')
+        call CocActionAsync('doHover')
+      else
+        call feedkeys('K', 'in')
+      endif
+    endfunction
 
-        " Highlight the symbol and its references when holding the cursor.
-        autocmd CursorHold * silent call CocActionAsync('highlight')
+    " Highlight the symbol and its references when holding the cursor.
+    autocmd CursorHold * silent call CocActionAsync('highlight')
 
-        " Symbol renaming.
-        nmap <Leader>lr <Plug>(coc-rename)
+    " Symbol renaming.
+    nmap <Leader>lr <Plug>(coc-rename)
 
-        " Formatting selected code.
-        xmap <A-f>  <Plug>(coc-format-selected)
-        nmap <A-f>  <Plug>(coc-format-selected)
+    " Formatting selected code.
+    xmap <Leader>lf  <Plug>(coc-format-selected)
+    nmap <Leader>lf  <Plug>(coc-format-selected)
 
-        " Remap keys for applying codeAction to the current buffer.
-        nmap <Leader>ac  <Plug>(coc-codeaction)
-        " Apply AutoFix to problem on the current line.
-        nmap <Leader>qf  <Plug>(coc-fix-current)
-        
-        " Run the Code Lens action on the current line.
-        nmap <Leader>cl  <Plug>(coc-codelens-action)
-        
-        " Use <Leader>-s for selections ranges.
-        " Requires 'textDocument/selectionRange' support of language server.
-        nmap <silent> <Leader>s <Plug>(coc-range-select)
-        xmap <silent> <Leader>s <Plug>(coc-range-select)
+    augroup mygroup
+      autocmd!
+      " Setup formatexpr specified filetype(s).
+      autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+      " Update signature help on jump placeholder.
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    augroup end
 
-        " Add `:Format` command to format current buffer.
-        command! -nargs=0 Format :call CocActionAsync('format')
-        
-        " Add `:Fold` command to fold current buffer.
-        command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-        
-        " Add `:OR` command for organize imports of the current buffer.
-        command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+    " Applying codeAction to the selected region.
+    " Example: `<leader>aap` for current paragraph
+    xmap <leader>ac  <Plug>(coc-codeaction-selected)
+    nmap <leader>ac  <Plug>(coc-codeaction-selected)
 
-        " Mappings for CoCList
-        " Show all diagnostics.
-        " nnoremap <silent><nowait> <Leader>qd  :<C-u>CocList diagnostics<cr>
-        " Manage extensions.
-        nnoremap <silent><nowait> <Leader>ext  :<C-u>CocList extensions<cr>
-        " Show commands.
-        nnoremap <silent><nowait> <Leader>cmd  :<C-u>CocList commands<cr>
-        " Find symbol of current document.
-        nnoremap <silent><nowait> <Leader>ol  :<C-u>CocList outline<cr>
-        " Search workspace symbols.
-        nnoremap <silent><nowait> <Leader>s  :<C-u>CocList -I symbols<cr>
-        " Do default action for next item.
-        nnoremap <silent><nowait> <Leader>j  :<C-u>CocNext<CR>
-        " Do default action for previous item.
-        nnoremap <silent><nowait> <Leader>k  :<C-u>CocPrev<CR>
-        " Resume latest coc list.
-        nnoremap <silent><nowait> <Leader>cr  :<C-u>CocListResume<CR>
+    " Remap keys for applying codeAction to the current buffer.
+    nmap <Leader>ac  <Plug>(coc-codeaction)
+    " Apply AutoFix to problem on the current line.
+    nmap <Leader>qf  <Plug>(coc-fix-current)
+    
+    " Run the Code Lens action on the current line.
+    nmap <Leader>ca  <Plug>(coc-codelens-action)
+    
+    " Map function and class text objects
+    " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+    xmap if <Plug>(coc-funcobj-i)
+    omap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap af <Plug>(coc-funcobj-a)
+    xmap ic <Plug>(coc-classobj-i)
+    omap ic <Plug>(coc-classobj-i)
+    xmap ac <Plug>(coc-classobj-a)
+    omap ac <Plug>(coc-classobj-a)
+
+    " Remap <C-f> and <C-b> for scroll float windows/popups.
+    if has('nvim-0.4.0') || has('patch-8.2.0750')
+      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    endif
+
+    " Add `:Format` command to format current buffer.
+    command! -nargs=0 Format :call CocActionAsync('format')
+    
+    " Add `:Fold` command to fold current buffer.
+    command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+    
+    " Add `:OR` command for organize imports of the current buffer.
+    command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+    " Mappings for CoCList
+    " Show all diagnostics.
+    " nnoremap <silent><nowait> <Leader>qd  :<C-u>CocList diagnostics<cr>
+    " Manage extensions.
+    nnoremap <silent><nowait> <Leader>ext  :<C-u>CocList extensions<cr>
+    " Show commands.
+    nnoremap <silent><nowait> <Leader>cmd  :<C-u>CocList commands<cr>
+    " Find symbol of current document.
+    nnoremap <silent><nowait> <Leader>ol  :<C-u>CocList outline<cr>
+    " Search workspace symbols.
+    nnoremap <silent><nowait> <Leader>sym  :<C-u>CocList -I symbols<cr>
+    " Do default action for next item.
+    nnoremap <silent><nowait> <Leader>j  :<C-u>CocNext<CR>
+    " Do default action for previous item.
+    nnoremap <silent><nowait> <Leader>k  :<C-u>CocPrev<CR>
+    " Resume latest coc list.
+    nnoremap <silent><nowait> <Leader>cr  :<C-u>CocListResume<CR>
   ]]
 
   -- autocmd FileType * let b:coc_trim_final_newlines = 1
@@ -162,5 +180,85 @@ M.setup = function()
     { pattern = "*", command = "let b:coc_trim_trailing_whitespace = 1" }
   )
 end
+
+local coc_status_record = {}
+
+local function coc_status_notify(msg, level)
+  local notify_opts = { title = "LSP Status", timeout = 500, hide_from_history = true, on_close = reset_coc_status_record }
+  -- if coc_status_record is not {} then add it to notify_opts to key called "replace"
+  if coc_status_record ~= {} then
+    notify_opts["replace"] = coc_status_record.id
+  end
+  coc_status_record = vim.notify(msg, level, notify_opts)
+end
+
+local function reset_coc_status_record(window)
+  coc_status_record = {}
+end
+
+local coc_diag_record = {}
+
+local function coc_diag_notify(msg, level)
+  local notify_opts = { title = "LSP Diagnostics", timeout = 500, on_close = reset_coc_diag_record }
+  -- if coc_diag_record is not {} then add it to notify_opts to key called "replace"
+  if coc_diag_record ~= {} then
+    notify_opts["replace"] = coc_diag_record.id
+  end
+  coc_diag_record = vim.notify(msg, level, notify_opts)
+end
+
+local function reset_coc_diag_record(window)
+  coc_diag_record = {}
+end
+
+--[[
+function! s:DiagnosticNotify() abort
+  let l:info = get(b:, 'coc_diagnostic_info', {})
+  if empty(l:info) | return '' | endif
+  let l:msgs = []
+  let l:level = 'info'
+   if get(l:info, 'warning', 0)
+    let l:level = 'warn'
+  endif
+  if get(l:info, 'error', 0)
+    let l:level = 'error'
+  endif
+ 
+  if get(l:info, 'error', 0)
+    call add(l:msgs, ' Errors: ' . l:info['error'])
+  endif
+  if get(l:info, 'warning', 0)
+    call add(l:msgs, ' Warnings: ' . l:info['warning'])
+  endif
+  if get(l:info, 'information', 0)
+    call add(l:msgs, ' Infos: ' . l:info['information'])
+  endif
+  if get(l:info, 'hint', 0)
+    call add(l:msgs, ' Hints: ' . l:info['hint'])
+  endif
+  let l:msg = join(l:msgs, "\n")
+  if empty(l:msg) | let l:msg = ' All OK' | endif
+  call v:lua.coc_diag_notify(l:msg, l:level)
+endfunction
+]] --
+
+local function status_notify()
+  local status = vim.g:get('coc_status', '')
+  local level = 'info'
+  if status ~= '' then return '' else end
+  coc_status_notify(status, level)
+end
+
+local function coc_init()
+  vim.notify('Initialized coc.nvim for LSP support', 'info', { title = 'CoC' })
+end
+
+-- notifications
+vim.api.nvim_create_autocmd("User", { pattern = "CocNvimInit", callback = coc_init })
+-- autocmd User CocNvimInit "lua coc_init"
+-- vim.api.nvim_create_autocmd({ "CocDiagnosticChange" }, { command = "s:DiagnosticNotify" })
+-- autocmd User CocDiagnosticChange call s:DiagnosticNotify()
+vim.api.nvim_create_autocmd("User", { pattern = "CocStatusChange", callback = status_notify })
+-- autocmd User CocStatusChange call s:StatusNotify()
 
 return M

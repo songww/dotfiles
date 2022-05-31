@@ -5,9 +5,11 @@ local M = {}
 -- make sure you maintain the structure of `core/default_config.lua` here,
 
 local highlights = require("custom.highlights")
+-- local ayu = require("custom.highlights.mayu")
 
 M.ui = {
   theme = "tokyonight",
+  -- theme = "ayu",
   hl_override = highlights,
 }
 
@@ -69,17 +71,67 @@ M.plugins = {
     "kyazdani42/nvim-tree.lua",
   },
   override = {
+    ["folke/which-key.nvim"] = {
+      triggers_blacklist = {
+        -- list of mode / prefixes that should never be hooked by WhichKey
+        -- this is mostly relevant for key maps that start with a native binding
+        -- most people should not need to change this
+        i = { "j", "k", "l", "h", "o" },
+        n = { "j", "k", "l", "h", "o" },
+        v = { "j", "k", "l", "h", "o" },
+      },
+    },
     ["nvim-treesitter/nvim-treesitter"] = pluginConfs.treesitter,
-    ["akinsho/bufferline.nvim"] = { options = { offsets = {
-      {
-        filetype = "neo-tree",
-        text = "Files",
-        highlight = "Directory",
-        text_align = "left"
+    ["akinsho/bufferline.nvim"] = {
+      options = {
+        offsets = {
+          {
+            filetype = "neo-tree",
+            text = "Files",
+            highlight = "Directory",
+            text_align = "left"
+          }
+        }
       }
-    } } }
+    }
   },
   user = userPlugins,
+}
+
+M.mappings = {
+  misc = {
+    n = {
+      ["<Leader>uo"] = { "<Plug>(coc-opoenlink)", "coc - Open Link" },
+    }
+  },
+  legendary = {
+    n = {
+      ["<C-p>"] = {
+        function()
+          require('legendary').find()
+        end,
+        "legendary - search keymaps, commands, and autocmds"
+      },
+      ["<leader>pk"] = {
+        function()
+          require('legendary').find('keymaps')
+        end,
+        "legendary - search keymaps"
+      },
+      ["<leader>pc"] = {
+        function()
+          require('legendary').find('commands')
+        end,
+        "legendary - search commands"
+      },
+      ["<leader>pa"] = {
+        function()
+          require('legendary').find('autocmds')
+        end,
+        "legendary - search autocmds"
+      },
+    },
+  }
 }
 
 return M

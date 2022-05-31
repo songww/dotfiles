@@ -24,15 +24,12 @@ return {
     }
   },
   ["lewis6991/gitsigns.nvim"] = {
-    -- after = { "folke/which-key.nvim" },
-    opt = true,
+    event = "BufReadPost",
     module = "gitsigns",
-    setup = function()
-      require("core.utils").packer_lazy_load "gitsigns.nvim"
-    end,
     config = function()
       local cfgs = require("custom.plugins.configs.gitsigns")
-      require("gitsigns").setup(cfgs)
+      local _, gitsigns = pcall(require, "gitsigns")
+      gitsigns.setup(cfgs)
     end,
   },
 
@@ -62,6 +59,16 @@ return {
       require("neo-tree").setup(configs)
     end
   },
+  -- ["Luxed/ayu-vim"] = {
+  --   event = "BufReadPost",
+  --   setup = function()
+  --     vim.o.background = "dark" -- for either mirage or dark version.
+  --     vim.g.ayucolor = "mirage" -- for mirage version of theme
+  --   end,
+  --   config = function()
+  --     -- vim.cmd [[colorscheme ayu]]
+  --   end
+  -- },
   ["JoosepAlviste/nvim-ts-context-commentstring"] = {
     module = "ts_context_commentstring",
   },
@@ -122,37 +129,15 @@ return {
   ['petobens/poet-v'] = {
     ft = { "python" }
   },
-  ["folke/which-key.nvim"] = {
+  ["mrjones2014/legendary.nvim"] = {
+    before = "folke/which-key.nvim",
     config = function()
       local opts = require("custom.plugins.configs.whichkey")
-      require("which-key").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-        triggers_blacklist = {
-          -- list of mode / prefixes that should never be hooked by WhichKey
-          -- this is mostly relevant for key maps that start with a native binding
-          -- most people should not need to change this
-          i = { "j", "k", "l", "h", "o" },
-          n = { "j", "k", "l", "h", "o" },
-          v = { "j", "k", "l", "h", "o" },
-        },
-      })
       require('legendary').setup({
         autocmds = opts.autocmds,
         commands = opts.commands,
       })
-      vim.keymap.set(
-        { "n", "v", 'o', 'x' },
-        "<C-p>",
-        ":lua require('legendary').find()<CR>",
-        { desc = "legendary - search keymaps, commands, and autocmds" }
-      )
-      require("which-key").register(opts.keymaps.n, { mode = "n" })
     end
-  },
-  ["mrjones2014/legendary.nvim"] = {
-    before = "folke/which-key.nvim",
   },
   ['editorconfig/editorconfig-vim'] = {
     event = "BufReadPost",
@@ -163,7 +148,7 @@ return {
   ['nvim-lualine/lualine.nvim'] = {
     after = "nvim-web-devicons",
     requires = {
-      { 'arkav/lualine-lsp-progress', opt = true },
+      -- { 'arkav/lualine-lsp-progress', opt = true },
     },
     config = function()
       require("custom.plugins.configs.lualine").setup()
@@ -251,6 +236,7 @@ return {
     end
   },
   ['sindrets/diffview.nvim'] = {
+    disable = true,
     event = "BufReadPost",
     requires = { { 'nvim-lua/plenary.nvim', opt = true } },
   },
@@ -410,5 +396,9 @@ return {
     setup = function()
       require("custom.plugins.configs.coc").setup()
     end
+  },
+  ["github/copilot.vim"] = {
+    branch = "release",
+    event = "BufReadPost",
   }
 }
