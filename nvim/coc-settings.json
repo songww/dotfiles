@@ -1,5 +1,9 @@
 {
   "codeLens.enable": true,
+  "coc.preferences.promptInput": true,
+  "coc.preferences.floatActions": true,
+  "coc.preferences.enableMarkdown": true,
+  "coc.preferences.snippetStatusText": "SNIP",
   "coc.preferences.enableMessageDialog": true,
   "coc.preferences.extensionUpdateCheck": "weekly",
   "coc.preferences.silentAutoupdate": false,

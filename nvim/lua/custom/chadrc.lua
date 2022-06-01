@@ -104,6 +104,15 @@ M.mappings = {
       ["<Leader>uo"] = { "<Plug>(coc-opoenlink)", "coc - Open Link" },
     }
   },
+  neotree = {
+    n = {
+      -- toggle
+      ["<C-n>"] = { "<cmd> Neotree toggle<CR>", "   toggle neotree" },
+
+      -- focus
+      ["<leader>e"] = { "<cmd> Neotree reveal<CR>", "   focus neotree" },
+    },
+  },
   legendary = {
     n = {
       ["<C-p>"] = {
