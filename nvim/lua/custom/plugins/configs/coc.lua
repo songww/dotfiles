@@ -17,6 +17,7 @@ M.setup = function()
     'coc-toml',
     'coc-yaml',
     'coc-yank',
+    'coc-esbonio',
   }
 
   vim.g.coc_status_error_sign = ''
@@ -26,11 +27,11 @@ M.setup = function()
     " Use tab for trigger completion with characters ahead and navigate.
     " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
     " other plugin before putting this into your config.
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? "\<C-n>" :
-          \ Helper_check_backspace() ? "\<TAB>" :
-          \ coc#refresh()
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    " inoremap <silent><expr> <TAB>
+    "       \ pumvisible() ? "\<C-n>" :
+    "       \ Helper_check_backspace() ? "\<TAB>" :
+    "       \ coc#refresh()
+    " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
     "inoremap <silent><expr> <TAB>
     "  \ pumvisible() ? coc#_select_confirm() :
     "  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
@@ -44,7 +45,8 @@ M.setup = function()
     
   ]]
 
-  vim.g.coc_snippet_next = '<Tab>'
+  vim.g.coc_snippet_next = '<C-n>'
+  vim.g.coc_snippet_prev = '<C-p>'
 
   -- Use <cr> to confirm completion
   --[[
@@ -182,8 +184,15 @@ M.setup = function()
 
   -- notifications
   vim.api.nvim_create_autocmd("User", { pattern = "CocDiagnosticChange", callback = M.diagnostic_notify })
-  vim.api.nvim_create_autocmd("User", { pattern = "CocStatusChange", callback = M.status_notify })
+  -- vim.api.nvim_create_autocmd("User", { pattern = "CocStatusChange", callback = M.status_notify })
   vim.api.nvim_create_autocmd("User", { pattern = "CocNvimInit", callback = M.coc_init })
+end
+
+function M.config()
+  local function coc_notify(msg, level)
+    local notify_opts = { title = "LSP Message", timeout = 500 }
+    vim.notify(msg, level, notify_opts)
+  end
 end
 
 M.coc_diag_record = {}
@@ -234,13 +243,13 @@ function M.diagnostic_notify()
     table.insert(msgs, string.format(' Errors: %s', info['error']))
   end
   if info.warning ~= nil then
-    table.insert(msgs, string.format(' Warnings: ', info['warning']))
+    table.insert(msgs, string.format(' Warnings: %s', info['warning']))
   end
   if info.information ~= nil then
-    table.insert(msgs, string.format(' Infos: ', info['information']))
+    table.insert(msgs, string.format(' Infos: %s', info['information']))
   end
   if info.hint ~= nil then
-    table.insert(msgs, string.format(' Hints: ', info['hint']))
+    table.insert(msgs, string.format(' Hints: %s', info['hint']))
   end
   local msg = table.concat(msgs, "\n")
   if msg == '' or msg == nil then
