@@ -21,7 +21,14 @@ return {
       { "nvim-treesitter/nvim-treesitter-textobjects", opt = true },
       { "JoosepAlviste/nvim-ts-context-commentstring", opt = true },
       { "p00f/nvim-ts-rainbow", opt = true },
-    }
+    },
+    config = function()
+      local lazy_load = require("core.utils").packer_lazy_load
+      lazy_load('nvim-ts-rainbow')
+      lazy_load('nvim-treesitter-textobjects')
+      lazy_load('nvim-ts-context-commentstring')
+      require "plugins.configs.treesitter"
+    end,
   },
   ["lewis6991/gitsigns.nvim"] = {
     event = "BufReadPost",
@@ -55,6 +62,9 @@ return {
       vim.keymap.set('n', '<C-n>', ':Neotree toggle<cr>', { silent = true })
     end,
     config = function()
+      local lazy_load = require("core.utils").packer_lazy_load
+      lazy_load('nui')
+      lazy_load('plenary')
       local configs = require("custom.plugins.configs.neotree")
       require("neo-tree").setup(configs)
     end
@@ -395,10 +405,19 @@ return {
     },
     setup = function()
       require("custom.plugins.configs.coc").setup()
-    end
+    end,
+    config = function()
+      require("custom.plugins.configs.coc").config()
+      local lazy_load = require("core.utils").packer_lazy_load
+      lazy_load('ultisnips')
+      lazy_load('vim-snippets')
+      lazy_load('coc-snippets')
+      lazy_load('neco-vim')
+      lazy_load('coc-neco')
+    end,
   },
   ["github/copilot.vim"] = {
     branch = "release",
-    event = "BufReadPost",
+    event = "bufreadpost",
   }
 }
