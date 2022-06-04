@@ -1,0 +1,55 @@
+.popup-menu-boxpointer.kimpanel-popup-boxpointer {
+  /* you may customize pointer box here */
+}
+
+.popup-menu-content.kimpanel-popup-content {
+  /* you may customize pointer box here */
+  padding: 0em;
+  border: 0px rgb(255, 255, 255);
+  border-radius: 4px;
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+}
+
+.kimpanel-label {
+  font-weight: normal;
+  font-size: 16pt;
+  padding: 0.3em 0.8em;
+}
+
+.kimpanel-candidate-item {
+  cursor: pointer;
+  overflow: none;
+}
+
+.kimpanel-candidate-item:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(14, 107, 216);
+}
+
+.kimpanel-candidate-item:first-child {
+  border-radius: 4px, 0px, 0px, 4px;
+}
+
+.kimpanel-candidate-item:last-child {
+  border-radius: 0px, 4px, 4px, 0px;
+}
+
+.kimpanel-candidate-item:active {
+  color: rgb(255, 255, 255);
+  background-color: rgb(14, 107, 216);
+}
+
+.kimpanel-candidate-item:active:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(14, 107, 216);
+}
+
+.minwidth-zero {
+  min-width: 0;
+  font-size: 8pt;
+}
+
+.icon-disable {
+  color: rgba(150, 150, 150, 0.5);
+}
