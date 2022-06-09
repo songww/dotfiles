@@ -56,18 +56,6 @@ M.plugins = {
   remove = {
     "feline-nvim/feline.nvim",
     "lukas-reineke/indent-blankline.nvim",
-    "neovim/nvim-lspconfig",
-    "ray-x/lsp_signature.nvim",
-    "williamboman/nvim-lsp-installer",
-    "rafamadriz/friendly-snippets",
-    "hrsh7th/nvim-cmp",
-    "hrsh7th/cmp-nvim-lua",
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "L3MON4D3/LuaSnip",
-    "saadparwaiz1/cmp_luasnip",
-    "windwp/nvim-autopairs",
     "kyazdani42/nvim-tree.lua",
   },
   override = {
@@ -81,7 +69,17 @@ M.plugins = {
         v = { "j", "k", "l", "h", "o" },
       },
     },
+    ["hrsh7th/nvim-cmp"] = pluginConfs.cmp,
     ["nvim-treesitter/nvim-treesitter"] = pluginConfs.treesitter,
+    ["williamboman/nvim-lsp-installer"] = {
+      ensure_installed = { "sumneko_lua", "rust_analyzer", "pyright", "jsonls" },
+      automatic_installation = false,
+    },
+    ["ray-x/lsp_signature.nvim"] = {
+      -- timer_interval = 400, -- default timer check interval set to lower value if you want to reduce latency
+      toggle_key = "<M>x", -- toggle signature on and off in insert mode
+      doc_lines = 10,
+    },
     ["akinsho/bufferline.nvim"] = {
       options = {
         offsets = {
@@ -95,14 +93,19 @@ M.plugins = {
       }
     }
   },
+  options = {
+    lspconfig = {
+      setup_lspconf = "custom.plugins.configs.lspconfig"
+    }
+  },
   user = userPlugins,
 }
 
 M.mappings = {
   misc = {
-    n = {
-      ["<Leader>uo"] = { "<Plug>(coc-opoenlink)", "coc - Open Link" },
-    }
+    -- n = {
+    --   ["<Leader>uo"] = { "<Plug>(coc-opoenlink)", "coc - Open Link" },
+    -- }
   },
   neotree = {
     n = {

@@ -102,31 +102,4 @@ M.gitsigns = {
   },
 }
 
---[[
-local _, cmp = pcall(require, "cmp")
-
-M.cmp = {
-  mapping = {
-    ["C-p"] = nil,
-    ["C-n"] = nil,
-    ["C-Space"] = nil,
-    ["<C-k>"] = cmp.mapping.select_prev_item(),
-    ["<C-j>"] = cmp.mapping.select_next_item(),
-    ["<C-P>"] = cmp.mapping.complete(),
-  },
-  sources = {
-    { name = "nvim_lsp" },
-    { name = "luasnip" },
-    { name = "path" },
-    { name = "buffer" },
-    { name = "cmdline" },
-    { name = "nvim_lua" },
-    { name = "cmp_tabnine" },
-    { name = "emoji" },
-    { name = "treesitter" },
-    { name = "crates" },
-  },
-}
-]] --
-
 return M

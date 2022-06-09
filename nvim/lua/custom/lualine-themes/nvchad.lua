@@ -166,68 +166,78 @@ ins_left({
 
 ins_left({
   "diagnostics",
-  source = coc_diagnostics,
+  -- source = coc_diagnostics,
+  sources = { 'nvim_lsp', 'nvim_diagnostic' },
   symbols = { error = " ", warn = " ", info = " " },
+
+  -- Displays diagnostics for the defined severity types
+  sections = { 'error', 'warn', 'info', 'hint' },
   diagnostics_color = {
-    error = { fg = colors.red },
-    warn = { fg = colors.yellow },
-    info = { fg = colors.cyan },
+    -- Same values as the general color option can be used here.
+    error = 'DiagnosticError', -- Changes diagnostics' error color.
+    warn  = 'DiagnosticWarn', -- Changes diagnostics' warn color.
+    info  = 'DiagnosticInfo', -- Changes diagnostics' info color.
+    hint  = 'DiagnosticHint', -- Changes diagnostics' hint color.
   },
+  -- diagnostics_color = {
+  --   error = { fg = colors.red },
+  --   warn = { fg = colors.yellow },
+  --   info = { fg = colors.cyan },
+  -- },
   colored = true,
-  cond = nil,
+  update_in_insert = false, -- Update diagnostics in insert mode.
 })
 
--- ins_right({
---   'lsp_progress',
---   display_components = { { 'title', 'percentage', 'message' } },
---   -- With spinner
---   -- display_components = { 'lsp_client_name', 'spinner', { 'title', 'percentage', 'message' } },
---   colors = {
---     percentage      = colors.cyan,
---     title           = colors.cyan,
---     message         = colors.cyan,
---     spinner         = colors.cyan,
---     lsp_client_name = colors.magenta,
---     use             = true,
---   },
---   separators = {
---     component = ' ',
---     progress = ' | ',
---     -- message = { pre = '(', post = ')'},
---     percentage = { pre = '', post = '%% ' },
---     title = { pre = '', post = ': ' },
---     lsp_client_name = { pre = '[', post = ']' },
---     spinner = { pre = '', post = '' },
---     message = { commenced = 'In Progress', completed = 'Completed' },
---   },
---   timer = { progress_enddelay = 500, spinner = 1000, lsp_client_name_enddelay = 1000 },
---   spinner_symbols = { '🌑 ', '🌒 ', '🌓 ', '🌔 ', '🌕 ', '🌖 ', '🌗 ', '🌘 ' },
--- })
-
---ins_right({
---	function()
---		local msg = ""
---		local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
---		local clients = vim.lsp.get_active_clients()
---		if next(clients) == nil then
---			return msg
---		end
---		for _, client in ipairs(clients) do
---			local filetypes = client.config.filetypes
---			if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
---				return client.name
---			end
---		end
---		return msg
---	end,
---	icon = " ",
---	color = { fg = colors.violet, gui = "bold" },
---})
 ins_right({
-  coc_status,
+  'lsp_progress',
+  display_components = { { 'title', 'percentage', 'message' } },
+  -- With spinner
+  colors = {
+    percentage      = colors.cyan,
+    title           = colors.cyan,
+    message         = colors.cyan,
+    spinner         = colors.cyan,
+    lsp_client_name = colors.magenta,
+    use             = true,
+  },
+  separators = {
+    component = ' ',
+    progress = ' | ',
+    -- message = { pre = '(', post = ')'},
+    percentage = { pre = '', post = '%% ' },
+    title = { pre = '', post = ': ' },
+    lsp_client_name = { pre = '[', post = ']' },
+    spinner = { pre = '', post = '' },
+    message = { commenced = 'In Progress', completed = 'Completed' },
+  },
+  timer = { progress_enddelay = 500, spinner = 1000, lsp_client_name_enddelay = 1000 },
+  spinner_symbols = { '🌑 ', '🌒 ', '🌓 ', '🌔 ', '🌕 ', '🌖 ', '🌗 ', '🌘 ' },
+})
+
+ins_right({
+  function()
+    local msg = ""
+    local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
+    local clients = vim.lsp.get_active_clients()
+    if next(clients) == nil then
+      return msg
+    end
+    for _, client in ipairs(clients) do
+      local filetypes = client.config.filetypes
+      if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+        return client.name
+      end
+    end
+    return msg
+  end,
   icon = " ",
   color = { fg = colors.violet, gui = "bold" },
 })
+-- ins_right({
+--   coc_status,
+--   icon = " ",
+--   color = { fg = colors.violet, gui = "bold" },
+-- })
 
 ins_right({
   function()

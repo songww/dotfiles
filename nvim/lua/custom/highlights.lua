@@ -106,6 +106,6 @@ return {
   MatchParenCur = { link = "MatchWordCur" },
 --]]
 
-  CursorLine = { bg = '#171b24' },
-  CursorColumn = { bg = '#171b24' },
+  CursorLine = { bg = 'line' },
+  CursorColumn = { bg = 'line' },
 }

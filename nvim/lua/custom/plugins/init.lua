@@ -83,7 +83,7 @@ return {
     module = "ts_context_commentstring",
   },
   ["romgrk/nvim-treesitter-context"] = {
-    disable = true,
+    -- disable = true,
     requires = { "nvim-treesitter", opt = true },
     config = function()
       require 'treesitter-context'.setup({
@@ -139,6 +139,121 @@ return {
   ['petobens/poet-v'] = {
     ft = { "python" }
   },
+  ['simrat39/rust-tools.nvim'] = {
+    -- ft = { "rust" },
+    module = "rust-tools",
+    before = { "nvim-lspconfig" },
+    requires = {
+      { "neovim/nvim-lspconfig" },
+      { "mfussenegger/nvim-dap", opt = true }
+    },
+  },
+  ['p00f/clangd_extensions.nvim'] = {
+    -- ft = { "c", "cpp", "objc", "objcpp", "cuda" },
+    module = "clangd_extensions",
+    requires = {
+      { "neovim/nvim-lspconfig" },
+      { "mfussenegger/nvim-dap", opt = true }
+    },
+  },
+  ['tpope/vim-dadbod'] = {
+    opt = true,
+  },
+  ['kristijanhusak/vim-dadbod-ui'] = {
+    cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection" },
+    requires = { "tpope/vim-dadbod", 'kristijanhusak/vim-dadbod-completion' },
+    setup = function()
+      vim.g.db_ui_use_nerd_fonts = 1
+      vim.g.db_ui_save_location = '~/Dropbox/dbui_queries'
+      -- vim.g.db_ui_env_variable_url = 'DATABASE_URL'
+      -- vim.g.db_ui_env_variable_name = 'DATABASE_NAME'
+      vim.g.db_ui_dotenv_variable_prefix = 'DATABASE_'
+      -- vim.g.dbs = {
+      --   { name = 'dev', url = 'postgres://postgres:mypassword@localhost:5432/my-dev-db' },
+      --   { name = 'staging', url = 'postgres://postgres:mypassword@localhost:5432/my-staging-db' },
+      --   { name = 'wp', url = 'mysql://root@localhost/wp_awesome' },
+      -- }
+      vim.g.db_ui_table_helpers = {
+        postgresql = {
+          Count = 'select count(*) from "{table}"'
+        }
+      }
+    end,
+    config = function()
+      local lazy_load = require("core.utils").packer_lazy_load
+      lazy_load("vim-dadbod")
+      lazy_load('vim-dadbod-completion')
+    end
+  },
+  ['kristijanhusak/vim-dadbod-completion'] = {
+    ft = { "sql", "mysql", "plsql" },
+    -- after = { "vim-dadbod-ui" },
+    requires = { 'hrsh7th/nvim-cmp' },
+  },
+  ["jose-elias-alvarez/null-ls.nvim"] = {
+    after = "nvim-lspconfig",
+    config = function()
+      require("custom.plugins.configs.null").setup()
+    end,
+  },
+  ["mfussenegger/nvim-dap"] = {
+    opt = true,
+    module = "dap",
+    requires = {
+      { "rcarriga/nvim-dap-ui", opt = true },
+      { "nvim-dap-virtual-text", opt = true },
+    },
+    config = function()
+      require("custom.plugins.configs.dap-config").setup()
+      require("custom.plugins.configs.dapui-config").setup()
+      require("custom.plugins.configs.dap-virtual-text").setup()
+    end
+  },
+  ["rcarriga/nvim-dap-ui"] = {
+    before = { "mfussenegger/nvim-dap" },
+    module = "dapui",
+  },
+  ['theHamsta/nvim-dap-virtual-text'] = {
+    before = { "mfussenegger/nvim-dap" },
+    module = "nvim-dap-virtual-text",
+  },
+  ['rcarriga/cmp-dap'] = {
+    opt = true,
+    module = "cmp_dap",
+  },
+  ['hrsh7th/cmp-path'] = {
+    opt = true,
+    before = { 'hrsh7th/nvim-cmp' },
+  },
+  ['hrsh7th/cmp-cmdline'] = {
+    before = { 'hrsh7th/nvim-cmp' },
+  },
+  ['hrsh7th/cmp-emoji'] = {
+    before = { 'hrsh7th/nvim-cmp' },
+  },
+  ['tzachar/cmp-tabnine'] = {
+    run = './install.sh',
+    before = { 'hrsh7th/nvim-cmp' },
+    config = function()
+      local tabnine = require('cmp_tabnine.config')
+      tabnine:setup({
+        max_lines = 1000;
+        max_num_results = 5;
+        sort = true;
+        run_on_every_keystroke = true;
+        snippet_placeholder = '..';
+        ignored_file_types = { -- default is not to ignore
+          -- uncomment to ignore in lua:
+          -- lua = true
+        };
+        show_prediction_strength = false;
+      })
+    end
+  },
+  ['ray-x/cmp-treesitter'] = {
+    before = { 'hrsh7th/nvim-cmp' },
+  },
+
   ["mrjones2014/legendary.nvim"] = {
     before = "folke/which-key.nvim",
     config = function()
@@ -151,18 +266,18 @@ return {
   },
   ['editorconfig/editorconfig-vim'] = {
     event = "BufReadPost",
-    config = function()
+    setup = function()
       vim.cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
     end
   },
   ['nvim-lualine/lualine.nvim'] = {
     after = "nvim-web-devicons",
-    requires = {
-      -- { 'arkav/lualine-lsp-progress', opt = true },
-    },
     config = function()
       require("custom.plugins.configs.lualine").setup()
     end
+  },
+  ['arkav/lualine-lsp-progress'] = {
+    before = "lualine.nvim",
   },
   ["phaazon/hop.nvim"] = {
     event = "BufReadPost",
@@ -250,140 +365,6 @@ return {
     event = "BufReadPost",
     requires = { { 'nvim-lua/plenary.nvim', opt = true } },
   },
-  ['mhinz/vim-grepper'] = {
-    opt = true,
-    before = "kevinhwang91/nvim-bqf",
-    setup = function()
-      vim.cmd(([[
-        aug Grepper
-          au!
-          au User Grepper ++nested %s
-        aug END
-      ]]):format([[call setqflist([], 'r', {'context': {'bqf': {'pattern_hl': '\%#' . getreg('/')}}})]]))
-
-      -- try `gsiw` under word
-      vim.cmd([[
-        nmap gs <plug>(GrepperOperator)
-        xmap gs <plug>(GrepperOperator)
-      ]])
-    end
-  },
-  ["kevinhwang91/nvim-bqf"] = {
-    event = "BufReadPost",
-    commands = { "BqfToggle", "BqfAutoToggle" },
-    requires = {
-      { 'nvim-treesitter/nvim-treesitter', opt = true },
-      { 'neoclide/coc.nvim', opt = true },
-      { 'mhinz/vim-grepper', opt = true },
-    },
-    setup = function()
-      local jump_to_localtion = function(locs)
-        locs = locs or vim.g.coc_jump_locations
-        vim.fn.setloclist(0, {}, ' ', { title = 'CocLocationList', items = locs })
-        local winid = vim.fn.getloclist(0, { winid = 0 }).winid
-        if winid == 0 then
-          vim.cmd('abo lw')
-        else
-          vim.api.nvim_set_current_win(winid)
-        end
-      end
-
-      local diagnostic = function()
-        vim.fn.CocActionAsync('diagnosticList', '', function(err, res)
-          if err == vim.NIL then
-            local items = {}
-            for _, d in ipairs(res) do
-              local text = ('[%s%s] %s'):format((d.source == '' and 'coc.nvim' or d.source),
-                (d.code == vim.NIL and '' or ' ' .. d.code), d.message:match('([^\n]+)\n*'))
-              local item = {
-                filename = d.file,
-                lnum = d.lnum,
-                end_lnum = d.end_lnum,
-                col = d.col,
-                end_col = d.end_col,
-                text = text,
-                type = d.severity
-              }
-              table.insert(items, item)
-            end
-            vim.fn.setqflist({}, ' ', { title = 'CocDiagnosticList', items = items })
-
-            vim.cmd('bo cope')
-          end
-        end)
-      end
-
-      _G.jump_to_localtion = jump_to_localtion
-      vim.cmd([[
-        aug Coc
-            au!
-            au User CocLocationsChange lua _G.jump_to_localtion()
-        aug END
-      ]])
-      vim.keymap.set("n", "<leader>qd", diagnostic, { silent = true, noremap = true })
-    end,
-    config = function()
-      require("bqf").setup({
-        auto_enable = true,
-        auto_resize_height = true, -- highly recommended enable
-      })
-    end,
-  },
-  ['gelguy/wilder.nvim'] = {
-    disable = true,
-    requires = {
-      { "kyazdani42/nvim-web-devicons" },
-      { 'romgrk/fzy-lua-native' },
-    },
-    event = "BufReadPost",
-    config = function()
-      vim.cmd [[
-        call wilder#setup({
-          \ 'modes': [':'],
-          \ 'next_key': '<Tab>',
-          \ 'previous_key': '<S-Tab>',
-          \ 'accept_key': '<Down>',
-          \ 'reject_key': '<Up>',
-          \ })
-
-        let s:highlighters = [
-          \ wilder#pcre2_highlighter(),
-          \ wilder#lua_fzy_highlighter(),
-          \ ]
-
-        let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
-          \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
-          \ 'highlighter': s:highlighters,
-          \ 'max_height': 20,
-          \ 'left': [
-          \   ' ',
-          \   wilder#popupmenu_devicons(),
-          \   wilder#popupmenu_buffer_flags({
-          \     'flags': ' a + ',
-          \     'icons': {'+': '', 'a': '', 'h': ''},
-          \   }),
-          \ ],
-          \ 'right': [
-          \   ' ',
-          \   wilder#popupmenu_scrollbar(),
-          \ ],
-          \ }))
-
-        let s:wildmenu_renderer = wilder#wildmenu_renderer({
-          \ 'highlighter': s:highlighters,
-          \ 'separator': ' · ',
-          \ 'left': [' ', wilder#wildmenu_spinner(), ' '],
-          \ 'right': [' ', wilder#wildmenu_index()],
-          \ })
-
-        call wilder#set_option('renderer', wilder#renderer_mux({
-          \ ':': s:popupmenu_renderer,
-          \ '/': s:wildmenu_renderer,
-          \ 'substitute': s:wildmenu_renderer,
-          \ }))
-      ]]
-    end
-  },
   ['saecki/crates.nvim'] = {
     event = { "BufRead Cargo.toml" },
     requires = { 'nvim-lua/plenary.nvim' },
@@ -391,33 +372,15 @@ return {
       require('crates').setup()
     end,
   },
-  ["neoclide/coc.nvim"] = {
-    branch = 'release',
-    event = "BufReadPost",
-    requires = {
-      -- vim
-      { 'Shougo/neco-vim', opt = true },
-      { 'neoclide/coc-neco', opt = true },
-      -- snippet
-      { 'SirVer/ultisnips', opt = true },
-      { 'honza/vim-snippets', opt = true },
-      { 'neoclide/coc-snippets', opt = true },
-    },
-    setup = function()
-      local lazy_load = require("core.utils").packer_lazy_load
-      lazy_load('ultisnips')
-      lazy_load('vim-snippets')
-      lazy_load('coc-snippets')
-      lazy_load('neco-vim')
-      lazy_load('coc-neco')
-      require("custom.plugins.configs.coc").setup()
-    end,
-    config = function()
-      require("custom.plugins.configs.coc").config()
-    end,
-  },
   ["github/copilot.vim"] = {
     branch = "release",
-    event = "bufreadpost",
+    event  = "BufReadPost",
+    setup  = function()
+      vim.g.copilot_no_tab_map = true
+    end,
+    config = function()
+      vim.keymap.set('i', '<C-x>', vim.fn['copilot#Accept']("<CR>"), { expr = true, silent = true })
+      -- imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+    end
   }
 }
