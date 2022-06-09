@@ -184,23 +184,19 @@ M.setup = function()
 
   -- notifications
   vim.api.nvim_create_autocmd("User", { pattern = "CocDiagnosticChange", callback = M.diagnostic_notify })
-  -- vim.api.nvim_create_autocmd("User", { pattern = "CocStatusChange", callback = M.status_notify })
+  vim.api.nvim_create_autocmd("User", { pattern = "CocStatusChange", callback = M.status_notify })
   vim.api.nvim_create_autocmd("User", { pattern = "CocNvimInit", callback = M.coc_init })
 end
 
-function M.config()
-  local function coc_notify(msg, level)
-    local notify_opts = { title = "LSP Message", timeout = 500 }
-    vim.notify(msg, level, notify_opts)
-  end
+M.config = function()
 end
 
 M.coc_diag_record = {}
 M.coc_status_record = {}
 
-function M.coc_status_notify(msg, level)
+M.coc_status_notify = function(msg, level)
   local next = next
-  local notify_opts = { title = "LSP Status", timeout = 500, hide_from_history = true, on_close = M.reset_coc_status_record }
+  local notify_opts = { title = "coc", timeout = 500, hide_from_history = true, on_close = M.reset_coc_status_record }
   -- if coc_status_record is not {} then add it to notify_opts to key called "replace"
   if next(M.coc_status_record) ~= nil then
     notify_opts["replace"] = M.coc_status_record.id
@@ -208,11 +204,11 @@ function M.coc_status_notify(msg, level)
   M.coc_status_record = vim.notify(msg, level, notify_opts)
 end
 
-function M.reset_coc_status_record(window)
+M.reset_coc_status_record = function(window)
   M.coc_status_record = {}
 end
 
-function M.coc_diag_notify(msg, level)
+M.coc_diag_notify = function(msg, level)
   local notify_opts = { title = "LSP Diagnostics", timeout = 500, on_close = M.reset_coc_diag_record }
   -- if coc_diag_record is not {} then add it to notify_opts to key called "replace"
   if next(M.coc_diag_record) ~= nil then
@@ -225,7 +221,7 @@ function M.reset_coc_diag_record(window)
   M.coc_diag_record = {}
 end
 
-function M.diagnostic_notify()
+M.diagnostic_notify = function()
   local next = next
   local info = vim.b.coc_diagnostic_info or {}
   if info == nil then return '' end
@@ -258,15 +254,21 @@ function M.diagnostic_notify()
   M.coc_diag_notify(msg, level)
 end
 
-function M.status_notify()
+M.status_notify = function()
   local status = vim.g.coc_status
   if status == nil then return '' else end
   local level = 'info'
   M.coc_status_notify(status, level)
 end
 
-function M.coc_init()
-  vim.notify('Initialized coc.nvim for LSP support', 'info', { title = 'CoC' })
+M.coc_init = function()
+  vim.cmd [[runtime! autoload/coc/ui.vim]]
+  vim.notify('Initialized coc.nvim for LSP support', 'info', { title = 'coc' })
+end
+
+function coc_notify(msg, level)
+  local notify_opts = { title = "coc", timeout = 500 }
+  vim.notify(msg, level, notify_opts)
 end
 
 return M

@@ -404,16 +404,16 @@ return {
       { 'neoclide/coc-snippets', opt = true },
     },
     setup = function()
-      require("custom.plugins.configs.coc").setup()
-    end,
-    config = function()
-      require("custom.plugins.configs.coc").config()
       local lazy_load = require("core.utils").packer_lazy_load
       lazy_load('ultisnips')
       lazy_load('vim-snippets')
       lazy_load('coc-snippets')
       lazy_load('neco-vim')
       lazy_load('coc-neco')
+      require("custom.plugins.configs.coc").setup()
+    end,
+    config = function()
+      require("custom.plugins.configs.coc").config()
     end,
   },
   ["github/copilot.vim"] = {
