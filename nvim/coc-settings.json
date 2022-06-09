@@ -21,6 +21,7 @@
   "hover.target": "float",
   "links.tooltip": true,
   "signature.target": "float",
+  "suggest.floatEnable": true,
   "suggest.enablePreview": true,
   "suggest.removeDuplicateItems": true,
   "suggest.completionItemKindLabels": {
