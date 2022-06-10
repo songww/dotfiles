@@ -190,6 +190,13 @@ return {
     -- after = { "vim-dadbod-ui" },
     requires = { 'hrsh7th/nvim-cmp' },
   },
+  ['folke/trouble.nvim'] = {
+    event = "BufReadPost",
+    cmd = { "Trouble", "TroubleToggle" },
+    config = function()
+      require("custom.plugins.configs.trouble").setup()
+    end
+  },
   ["jose-elias-alvarez/null-ls.nvim"] = {
     after = "nvim-lspconfig",
     config = function()
