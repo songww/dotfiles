@@ -19,6 +19,11 @@ M.sumneko_lua = {
         -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
         version = 'LuaJIT',
       },
+      completion = {
+        callSnippet = "Both",
+        displayContext = 10,
+        keywordSnippet = "Both",
+      },
       diagnostics = {
         globals = { "vim" },
       },

@@ -37,11 +37,9 @@ local sources = {
 local M = {}
 
 function M.using_nullfmt(filetype)
-  local null = require("null-ls")
   local null_sources = require("null-ls.sources")
 
-  local sources = null_sources.get({})
-  for _, source in ipairs(sources) do
+  for _, source in ipairs(null_sources.get({})) do
     if source.name ~= "trim_whitespace"
         and null_sources.is_available(source, filetype, null.methods.FORMATTING)
     then
@@ -53,24 +51,12 @@ end
 
 M.setup = function()
   null.setup {
-    debug = true,
+    debug = false,
     sources = sources,
 
-    -- format on save
-    on_attach = function(client, bufnr)
+    on_attach = function(_ --[[ client ]] , bufnr)
       vim.api.nvim_create_autocmd({ "BufWritePre" }, { buffer = bufnr, callback = function()
         vim.lsp.buf.formatting_seq_sync()
-        -- vim.lsp.buf.format {
-        --   filter = function(clients)
-        --     return vim.tbl_filter(
-        --       function(client)
-        --         print(client.name)
-        --         return client.name ~= "tsserver"
-        --       end,
-        --       clients
-        --     )
-        --   end
-        -- }
       end })
     end,
   }
