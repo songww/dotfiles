@@ -175,7 +175,8 @@ local opts = {
           enable = true,
           bindingModeHints = { enable = true },
           closingBraceHints = { minLines = 1 },
-          closureReturnTypeHints = { enable = "always" },
+          -- closureReturnTypeHints = { enable = "always" },
+          closureReturnTypeHints = { enable = true },
           lifetimeElisionHints = {
             enable = "always",
             useParameterNames = true,
