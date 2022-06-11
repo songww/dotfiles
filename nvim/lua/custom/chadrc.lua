@@ -49,8 +49,9 @@ M.options = {
   end
 }
 
-local userPlugins = require "custom.plugins"
-local pluginConfs = require "custom.plugins.configs"
+local userPlugins = require("custom.plugins")
+local pluginConfs = require("custom.plugins.configs")
+pluginConfs.cmp = require("custom.plugins.configs.cmp")
 
 M.plugins = {
   remove = {
@@ -102,11 +103,6 @@ M.plugins = {
 }
 
 M.mappings = {
-  misc = {
-    -- n = {
-    --   ["<Leader>uo"] = { "<Plug>(coc-opoenlink)", "coc - Open Link" },
-    -- }
-  },
   neotree = {
     n = {
       -- toggle

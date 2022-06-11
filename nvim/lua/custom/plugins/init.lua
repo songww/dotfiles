@@ -63,8 +63,8 @@ return {
     end,
     config = function()
       local lazy_load = require("core.utils").packer_lazy_load
-      lazy_load('nui')
-      lazy_load('plenary')
+      lazy_load("nui.nvim")
+      lazy_load("plenary.nvim")
       local configs = require("custom.plugins.configs.neotree")
       require("neo-tree").setup(configs)
     end
@@ -187,7 +187,6 @@ return {
   },
   ['kristijanhusak/vim-dadbod-completion'] = {
     ft = { "sql", "mysql", "plsql" },
-    -- after = { "vim-dadbod-ui" },
     requires = { 'hrsh7th/nvim-cmp' },
   },
   ['folke/trouble.nvim'] = {
@@ -206,10 +205,6 @@ return {
   ["mfussenegger/nvim-dap"] = {
     opt = true,
     module = "dap",
-    requires = {
-      { "rcarriga/nvim-dap-ui", opt = true },
-      { "nvim-dap-virtual-text", opt = true },
-    },
     config = function()
       require("custom.plugins.configs.dap-config").setup()
       require("custom.plugins.configs.dapui-config").setup()
@@ -217,30 +212,39 @@ return {
     end
   },
   ["rcarriga/nvim-dap-ui"] = {
-    before = { "mfussenegger/nvim-dap" },
+    opt = true,
     module = "dapui",
+    requires = {
+      { "mfussenegger/nvim-dap", opt = true },
+      { "theHamsta/nvim-dap-virtual-text", opt = true },
+    },
+    config = function()
+      local lazy_load = require("core.utils").packer_lazy_load
+      lazy_load('nvim-dap')
+      lazy_load('nvim-dap-virtual-text')
+    end
   },
   ['theHamsta/nvim-dap-virtual-text'] = {
-    before = { "mfussenegger/nvim-dap" },
     module = "nvim-dap-virtual-text",
   },
   ['rcarriga/cmp-dap'] = {
-    opt = true,
+    event = 'InsertEnter',
     module = "cmp_dap",
-  },
-  ['hrsh7th/cmp-path'] = {
-    opt = true,
     before = { 'hrsh7th/nvim-cmp' },
   },
   ['hrsh7th/cmp-cmdline'] = {
+    event = 'InsertEnter',
     before = { 'hrsh7th/nvim-cmp' },
   },
   ['hrsh7th/cmp-emoji'] = {
+    event = 'InsertEnter',
     before = { 'hrsh7th/nvim-cmp' },
   },
   ['tzachar/cmp-tabnine'] = {
     run = './install.sh',
-    before = { 'hrsh7th/nvim-cmp' },
+    event = 'InsertEnter',
+    after = "nvim-cmp",
+    requires = { 'hrsh7th/nvim-cmp' },
     config = function()
       local tabnine = require('cmp_tabnine.config')
       tabnine:setup({
@@ -260,7 +264,15 @@ return {
   ['ray-x/cmp-treesitter'] = {
     before = { 'hrsh7th/nvim-cmp' },
   },
-
+  ['petertriho/cmp-git'] = {
+    module = "cmp_git",
+    ft = { "gitcommit", "octo" },
+    wants = 'nvim-cmp',
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("cmp_git").setup({})
+    end
+  },
   ["mrjones2014/legendary.nvim"] = {
     before = "folke/which-key.nvim",
     config = function()
@@ -289,8 +301,8 @@ return {
   ["phaazon/hop.nvim"] = {
     event = "BufReadPost",
     setup = function()
-      vim.api.nvim_set_keymap("n", "s", ":HopChar2<cr>", { silent = true })
-      vim.api.nvim_set_keymap("n", "S", ":HopWord<cr>", { silent = true })
+      vim.keymap.set("n", "s", ":HopChar2<cr>", { silent = true })
+      vim.keymap.set("n", "S", ":HopWord<cr>", { silent = true })
     end,
     config = function()
       require("hop").setup()
@@ -381,13 +393,13 @@ return {
   },
   ["github/copilot.vim"] = {
     branch = "release",
-    event  = "BufReadPost",
+    event  = "InsertEnter",
     setup  = function()
       vim.g.copilot_no_tab_map = true
     end,
     config = function()
-      vim.keymap.set('i', '<C-x>', vim.fn['copilot#Accept']("<CR>"), { expr = true, silent = true })
-      -- imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+      -- vim.keymap.set('i', '<C-M>', vim.fn['copilot#Accept']("<CR>"), { expr = true, silent = true })
+      vim.cmd [[inoremap <silent><script><expr> <M-x> copilot#Accept("\<CR>")]]
     end
   }
 }
