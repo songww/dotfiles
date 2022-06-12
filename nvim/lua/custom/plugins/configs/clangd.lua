@@ -1,8 +1,29 @@
 local M = {}
 
+local uv = vim.loop
+local path = require('lspconfig.util').path
+local root_pattern = require('lspconfig.util').root_pattern
+
+local find = function(p, fname)
+  if path.is_file(path.join(p, fname)) then
+    return path.join(p, fname)
+  end
+  local dir = uv.fs_scandir(p)
+  for name, type in uv.fs_scandir_next(dir) do
+    if type == 'directory' then
+      local res = find(path.join(p, name), fname)
+      if res then
+        return res
+      end
+    end
+  end
+end
+
 M.setup = function(on_attach)
   require("clangd_extensions").setup({
     server = {
+      -- options to pass to nvim-lspconfig
+      -- i.e. the arguments to require("lspconfig").clangd.setup({})
       cmd = {
         "clangd",
         "--background-index",
@@ -19,8 +40,12 @@ M.setup = function(on_attach)
         "--pch-storage=memory",
         "--inlay-hints"
       },
-      -- options to pass to nvim-lspconfig
-      -- i.e. the arguments to require("lspconfig").clangd.setup({})
+      root_dir = function(fname)
+
+        local pattern = root_pattern('compile_commands.json', 'compile_flags.txt', '.git')
+        local filename = path.is_absolute(fname) and fname or path.join(uv.cwd(), fname)
+        return pattern(filename)
+      end,
       on_attach = on_attach,
     },
     extensions = {

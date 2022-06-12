@@ -32,6 +32,8 @@ if not present1 then
   return false
 end
 
+local gps = require("nvim-gps")
+
 -- Colors
 local colors = require("base46").get_colors("base_30")
 
@@ -186,6 +188,11 @@ ins_left({
   -- },
   colored = true,
   update_in_insert = false, -- Update diagnostics in insert mode.
+})
+
+ins_left({
+  gps.get_location,
+  cond = gps.is_available
 })
 
 ins_right({
