@@ -4,16 +4,21 @@ local uv = vim.loop
 local path = require('lspconfig.util').path
 local root_pattern = require('lspconfig.util').root_pattern
 
-local find = function(p, fname)
+local find
+find = function(p, fname)
   if path.is_file(path.join(p, fname)) then
     return path.join(p, fname)
   end
-  local dir = uv.fs_scandir(p)
-  for name, type in uv.fs_scandir_next(dir) do
+  local req = uv.fs_scandir(p)
+  local function iter()
+    return uv.fs_scandir_next(req)
+  end
+
+  for name, type in iter do
     if type == 'directory' then
       local res = find(path.join(p, name), fname)
       if res then
-        return res
+        return path.dirname(res)
       end
     end
   end
@@ -41,6 +46,12 @@ M.setup = function(on_attach)
         "--inlay-hints"
       },
       root_dir = function(fname)
+        if root_pattern("meson.build")(fname) then
+          local root = find(path.dirname(fname), "compile_commands.json")
+          if root then
+            return root
+          end
+        end
 
         local pattern = root_pattern('compile_commands.json', 'compile_flags.txt', '.git')
         local filename = path.is_absolute(fname) and fname or path.join(uv.cwd(), fname)
