@@ -4,13 +4,13 @@ local M = {}
 
 -- make sure you maintain the structure of `core/default_config.lua` here,
 
-local highlights = require("custom.highlights")
+-- local highlights = require("custom.highlights")
 -- local ayu = require("custom.highlights.mayu")
 
 M.ui = {
   theme = "tokyonight",
-  -- theme = "ayu",
-  hl_override = highlights,
+  -- theme = "ayu-dark",
+  -- hl_override = highlights,
 }
 
 M.options = {
@@ -51,7 +51,6 @@ M.options = {
 
 local userPlugins = require("custom.plugins")
 local pluginConfs = require("custom.plugins.configs")
-pluginConfs.cmp = require("custom.plugins.configs.cmp")
 
 M.plugins = {
   remove = {
@@ -60,39 +59,17 @@ M.plugins = {
     "kyazdani42/nvim-tree.lua",
   },
   override = {
-    ["folke/which-key.nvim"] = {
-      triggers_blacklist = {
-        -- list of mode / prefixes that should never be hooked by WhichKey
-        -- this is mostly relevant for key maps that start with a native binding
-        -- most people should not need to change this
-        i = { "j", "k", "l", "h", "o" },
-        n = { "j", "k", "l", "h", "o" },
-        v = { "j", "k", "l", "h", "o" },
-      },
-    },
-    ["hrsh7th/nvim-cmp"] = pluginConfs.cmp,
     ["nvim-treesitter/nvim-treesitter"] = pluginConfs.treesitter,
-    ["williamboman/nvim-lsp-installer"] = {
-      ensure_installed = { "sumneko_lua", "rust_analyzer", "pyright", "jsonls" },
-      automatic_installation = false,
-    },
-    ["ray-x/lsp_signature.nvim"] = {
-      -- timer_interval = 400, -- default timer check interval set to lower value if you want to reduce latency
-      toggle_key = "<M>x", -- toggle signature on and off in insert mode
-      doc_lines = 10,
-    },
-    ["akinsho/bufferline.nvim"] = {
-      options = {
-        offsets = {
-          {
-            filetype = "neo-tree",
-            text = "Files",
-            highlight = "Directory",
-            text_align = "left"
-          }
-        }
-      }
-    }
+    ["williamboman/nvim-lsp-installer"] = pluginConfs.installer,
+    ["ray-x/lsp_signature.nvim"] = pluginConfs.signature,
+    ["akinsho/bufferline.nvim"] = pluginConfs.bufferline,
+    ["folke/which-key.nvim"] = pluginConfs.whichkey,
+    ["hrsh7th/nvim-cmp"] = function()
+      return require("custom.plugins.configs.cmp")
+    end,
+    ["lewis6991/gitsigns.nvim"] = function()
+      return require("custom.plugins.configs.gitsigns")
+    end,
   },
   options = {
     lspconfig = {

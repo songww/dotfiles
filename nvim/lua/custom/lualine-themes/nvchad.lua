@@ -10,21 +10,21 @@ local function diff_source()
   end
 end
 
-local function coc_diagnostics()
-  local diagnostics = vim.b.coc_diagnostic_info
-  if diagnostics then
-    return {
-      info = diagnostics.infomation,
-      warn = diagnostics.warning,
-      error = diagnostics.error,
-    }
-  end
-end
-
-local function coc_status()
-  local status = vim.g.coc_status
-  return status
-end
+-- local function coc_diagnostics()
+--   local diagnostics = vim.b.coc_diagnostic_info
+--   if diagnostics then
+--     return {
+--       info = diagnostics.infomation,
+--       warn = diagnostics.warning,
+--       error = diagnostics.error,
+--     }
+--   end
+-- end
+--
+-- local function coc_status()
+--   local status = vim.g.coc_status
+--   return status
+-- end
 
 -- LuaLine
 local present1, lualine = pcall(require, "lualine")
@@ -32,10 +32,10 @@ if not present1 then
   return false
 end
 
-local gps = require("nvim-gps")
+-- local gps = require("nvim-gps")
 
 -- Colors
-local colors = require("base46").get_colors("base_30")
+local colors = require("base46").get_theme_tb "base_30"
 
 -- Config
 local config = {
@@ -190,9 +190,11 @@ ins_left({
   update_in_insert = false, -- Update diagnostics in insert mode.
 })
 
+local navic = require("nvim-navic")
+
 ins_left({
-  gps.get_location,
-  cond = gps.is_available
+  navic.get_location,
+  cond = navic.is_available
 })
 
 ins_right({

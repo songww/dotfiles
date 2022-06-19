@@ -16,34 +16,8 @@ return {
       comment.setup(configs)
     end
   },
-  ["nvim-treesitter/nvim-treesitter"] = {
-    requires = {
-      { "nvim-treesitter/nvim-treesitter-textobjects", opt = true },
-      { "JoosepAlviste/nvim-ts-context-commentstring", opt = true },
-      { "p00f/nvim-ts-rainbow", opt = true },
-    },
-    config = function()
-      local lazy_load = require("core.utils").packer_lazy_load
-      lazy_load('nvim-ts-rainbow')
-      -- lazy_load('nvim-treesitter-context')
-      lazy_load('nvim-treesitter-textobjects')
-      lazy_load('nvim-ts-context-commentstring')
-
-      require "plugins.configs.treesitter"
-    end,
-  },
-  ["lewis6991/gitsigns.nvim"] = {
-    event = "BufReadPost",
-    module = "gitsigns",
-    config = function()
-      local cfgs = require("custom.plugins.configs.gitsigns")
-      local _, gitsigns = pcall(require, "gitsigns")
-      gitsigns.setup(cfgs)
-    end,
-  },
 
   ["farmergreg/vim-lastplace"] = {
-    event = "BufReadPre",
     setup = function()
       vim.g.lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
       vim.g.lastplace_ignore_buftype = "quickfix,nofile,help"
@@ -57,6 +31,10 @@ return {
       { "MunifTanjim/nui.nvim", opt = true }
     },
     cmd = { 'Neotree' },
+    wants = {
+      'nui.nvim',
+      'plenary.nvim',
+    },
     setup = function()
       -- Unless you are still migrating, remove the deprecated commands from v1.x
       vim.g.neo_tree_remove_legacy_commands = 1
@@ -64,9 +42,6 @@ return {
       vim.keymap.set('n', '<C-n>', ':Neotree toggle<cr>', { silent = true })
     end,
     config = function()
-      local lazy_load = require("core.utils").packer_lazy_load
-      lazy_load("nui.nvim")
-      lazy_load("plenary.nvim")
       local configs = require("custom.plugins.configs.neotree")
       require("neo-tree").setup(configs)
     end
@@ -83,11 +58,20 @@ return {
   -- },
   ["JoosepAlviste/nvim-ts-context-commentstring"] = {
     module = "ts_context_commentstring",
+    before = { "nvim-treesitter" },
+  },
+  ['nvim-treesitter/nvim-treesitter-textobjects'] = {
+    opt = true,
+    before = { "nvim-treesitter" },
+  },
+  ["p00f/nvim-ts-rainbow"] = {
+    opt = true,
+    before = { "nvim-treesitter" },
   },
   ["romgrk/nvim-treesitter-context"] = {
     opt = true,
+    before = { "nvim-treesitter" },
     -- disable = true,
-    -- requires = { "nvim-treesitter", opt = true },
     config = function()
       require 'treesitter-context'.setup({
         enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
@@ -203,12 +187,12 @@ return {
     ft = { "python" }
   },
   ['simrat39/rust-tools.nvim'] = {
-    -- ft = { "rust" },
+    opt = true,
+    after = "nvim-lspconfig",
     module = "rust-tools",
-    before = { "nvim-lspconfig" },
     requires = {
       { "neovim/nvim-lspconfig" },
-      { "mfussenegger/nvim-dap", opt = true }
+      { "mfussenegger/nvim-dap" }
     },
   },
   ['p00f/clangd_extensions.nvim'] = {
@@ -224,6 +208,10 @@ return {
   },
   ['kristijanhusak/vim-dadbod-ui'] = {
     cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection" },
+    wants = {
+      "vim-dadbod",
+      "vim-dadbod-completion"
+    },
     requires = { "tpope/vim-dadbod", 'kristijanhusak/vim-dadbod-completion' },
     setup = function()
       vim.g.db_ui_use_nerd_fonts = 1
@@ -243,9 +231,6 @@ return {
       }
     end,
     config = function()
-      local lazy_load = require("core.utils").packer_lazy_load
-      lazy_load("vim-dadbod")
-      lazy_load('vim-dadbod-completion')
     end
   },
   ['kristijanhusak/vim-dadbod-completion'] = {
@@ -277,36 +262,41 @@ return {
   ["rcarriga/nvim-dap-ui"] = {
     opt = true,
     module = "dapui",
+    wants = {
+      "nvim-dap",
+      "nvim-dap-virtual-text",
+    },
     requires = {
       { "mfussenegger/nvim-dap", opt = true },
       { "theHamsta/nvim-dap-virtual-text", opt = true },
     },
     config = function()
-      local lazy_load = require("core.utils").packer_lazy_load
-      lazy_load('nvim-dap')
-      lazy_load('nvim-dap-virtual-text')
     end
   },
   ['theHamsta/nvim-dap-virtual-text'] = {
     module = "nvim-dap-virtual-text",
   },
   ['rcarriga/cmp-dap'] = {
-    event = 'InsertEnter',
+    wants = 'nvim-cmp',
     module = "cmp_dap",
-    before = { 'hrsh7th/nvim-cmp' },
+    event = 'InsertEnter',
+    requires = { 'hrsh7th/nvim-cmp' },
   },
   ['hrsh7th/cmp-cmdline'] = {
+    wants = 'nvim-cmp',
     event = 'InsertEnter',
-    before = { 'hrsh7th/nvim-cmp' },
+    requires = { 'hrsh7th/nvim-cmp' },
   },
   ['hrsh7th/cmp-emoji'] = {
+    wants = 'nvim-cmp',
     event = 'InsertEnter',
-    before = { 'hrsh7th/nvim-cmp' },
+    requires = { 'hrsh7th/nvim-cmp' },
   },
   ['tzachar/cmp-tabnine'] = {
     run = './install.sh',
     event = 'InsertEnter',
-    after = "nvim-cmp",
+    wants = 'nvim-cmp',
+    after = { 'nvim-cmp' },
     requires = { 'hrsh7th/nvim-cmp' },
     config = function()
       local tabnine = require('cmp_tabnine.config')
@@ -325,7 +315,8 @@ return {
     end
   },
   ['ray-x/cmp-treesitter'] = {
-    before = { 'hrsh7th/nvim-cmp' },
+    opt = true,
+    requires = { 'hrsh7th/nvim-cmp' },
   },
   ['petertriho/cmp-git'] = {
     module = "cmp_git",
@@ -337,6 +328,8 @@ return {
     end
   },
   ["mrjones2014/legendary.nvim"] = {
+    opt = true,
+    module = "legendary",
     before = "folke/which-key.nvim",
     config = function()
       local opts = require("custom.plugins.configs.whichkey")
@@ -344,6 +337,7 @@ return {
         autocmds = opts.autocmds,
         commands = opts.commands,
       })
+      require("which-key")
     end
   },
   ['editorconfig/editorconfig-vim'] = {
@@ -360,6 +354,9 @@ return {
   },
   ['arkav/lualine-lsp-progress'] = {
     before = "lualine.nvim",
+  },
+  ['SmiteshP/nvim-navic'] = {
+    requires = "neovim/nvim-lspconfig",
   },
   ["phaazon/hop.nvim"] = {
     event = "BufReadPost",

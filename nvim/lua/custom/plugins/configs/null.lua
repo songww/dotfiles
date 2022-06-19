@@ -27,11 +27,12 @@ local sources = {
   b.formatting.jq,
   b.formatting.nginx_beautifier,
   b.formatting.pg_format,
-  -- b.formatting.rustfmt,
   b.formatting.rome,
   b.formatting.shfmt,
   b.formatting.trim_newlines,
-  b.formatting.trim_whitespace,
+  b.formatting.trim_whitespace.with({
+    disabled_filetypes = { "rust", "markdown" },
+  }),
 }
 
 local M = {}

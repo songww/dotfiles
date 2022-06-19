@@ -78,27 +78,37 @@ M.treesitter = {
   },
 }
 
-M.nvimtree = {
-  git = {
-    enable = true,
-  },
+M.bufferline = {
+  options = {
+    offsets = {
+      {
+        filetype = "neo-tree",
+        text = "Files",
+        highlight = "Directory",
+        text_align = "left"
+      }
+    }
+  }
 }
 
-M.gitsigns = {
-  signs = {
-    add = { hl = "DiffAdd", text = "▎", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-    change = { hl = "DiffChange", text = "▎", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-    delete = { hl = "DiffDelete", text = "契", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-    topdelete = { hl = "DiffDelete", text = "契", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-    changedelete = { hl = "DiffChangeDelete", text = "▎", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-  },
-  signcolumn = true,
-  current_line_blame = true,
-  current_line_blame_opts = {
-    virt_text = true,
-    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-    delay = 1000,
-    ignore_whitespace = false,
+M.signature = {
+  -- toggle_key = "<M-k>", -- toggle signature on and off in insert mode
+  doc_lines = 10,
+}
+
+M.installer = {
+  ensure_installed = { "sumneko_lua", "rust_analyzer", "pyright", "jsonls" },
+  automatic_installation = false,
+}
+
+M.whichkey = {
+  triggers_blacklist = {
+    -- list of mode / prefixes that should never be hooked by WhichKey
+    -- this is mostly relevant for key maps that start with a native binding
+    -- most people should not need to change this
+    i = { "j", "k", "l", "h", "o" },
+    n = { "j", "k", "l", "h", "o" },
+    v = { "j", "k", "l", "h", "o" },
   },
 }
 

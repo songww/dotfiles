@@ -1,3 +1,12 @@
+vim.cmd([[
+highlight! link NeoTreeDirectoryIcon NvimTreeFolderIcon
+highlight! link NeoTreeDirectoryName NvimTreeFolderName
+highlight! link NeoTreeSymbolicLinkTarget NvimTreeSymlink
+highlight! link NeoTreeRootName NvimTreeRootFolder
+highlight! link NeoTreeDirectoryName NvimTreeOpenedFolderName
+highlight! link NeoTreeFileNameOpened NvimTreeOpenedFile
+]])
+
 local config = {
   close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
   popup_border_style = "solid", -- "double", "none", "rounded", "shadow", "single" or "solid"
@@ -45,7 +54,7 @@ local config = {
     {
       event = "neo_tree_buffer_enter",
       handler = function()
-        vim.cmd("setlocal signcolumn=no")
+        vim.cmd [[setlocal signcolumn=no]]
       end
     },
     --  {

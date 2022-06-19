@@ -87,6 +87,8 @@ local M = {
     ["<C-j>"] = cmp.mapping.select_next_item(),
     ["<C-P>"] = cmp.mapping.complete(),
     ["<C-x>"] = cmp.mapping.complete(),
+    ["<Up>"] = cmp.mapping.select_prev_item(),
+    ["<Down>"] = cmp.mapping.select_next_item(),
     -- ["<Tab>"] = nil,
   },
   -- enabled = function()

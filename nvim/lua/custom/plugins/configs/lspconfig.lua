@@ -52,8 +52,12 @@ M.setup_lsp = function(attach, capabilities)
 
   local on_attach = function(client, bufnr)
     attach(client, bufnr)
+    require("nvim-navic").attach(client, bufnr)
     client.resolved_capabilities.document_formatting = true
     client.resolved_capabilities.document_range_formatting = true
+
+    client.server_capabilities.documentFormattingProvider = true
+    client.server_capabilities.documentRangeFormattingProvider = true
   end
 
   lspconfig.pyright.setup({
