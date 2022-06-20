@@ -9,6 +9,7 @@ local M = {}
 
 M.ui = {
   theme = "tokyonight",
+  transparency = true,
   -- theme = "ayu-dark",
   -- hl_override = highlights,
 }
