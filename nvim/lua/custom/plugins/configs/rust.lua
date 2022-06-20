@@ -177,8 +177,7 @@ local options = function()
             enable = true,
             bindingModeHints = { enable = true },
             closingBraceHints = { minLines = 1 },
-            -- closureReturnTypeHints = { enable = "always" },
-            closureReturnTypeHints = { enable = true },
+            closureReturnTypeHints = { enable = "always" },
             lifetimeElisionHints = {
               enable = "always",
               useParameterNames = true,
