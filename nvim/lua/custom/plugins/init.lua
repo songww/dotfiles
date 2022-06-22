@@ -359,10 +359,12 @@ return {
     requires = "neovim/nvim-lspconfig",
   },
   ["phaazon/hop.nvim"] = {
-    event = "BufReadPost",
+    cmd = { "HopWord", "HopChar2" },
+    module = "hop",
     setup = function()
-      vim.keymap.set("n", "s", ":HopChar2<cr>", { silent = true })
-      vim.keymap.set("n", "S", ":HopWord<cr>", { silent = true })
+      vim.keymap.set("n", "f", function() require('hop').hint_words() end, { silent = true })
+      vim.keymap.set("n", "s", function() require('hop').hint_char2() end, { silent = true })
+      vim.keymap.set("n", "<C-l>", function() require('hop').hint_lines() end, { silent = true })
     end,
     config = function()
       require("hop").setup()
