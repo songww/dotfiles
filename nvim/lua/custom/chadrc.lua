@@ -4,14 +4,14 @@ local M = {}
 
 -- make sure you maintain the structure of `core/default_config.lua` here,
 
--- local highlights = require("custom.highlights")
+local highlights = require("custom.highlights")
 -- local ayu = require("custom.highlights.mayu")
 
 M.ui = {
   theme = "tokyonight",
   transparency = true,
   -- theme = "ayu-dark",
-  -- hl_override = highlights,
+  hl_override = highlights,
 }
 
 M.options = {
