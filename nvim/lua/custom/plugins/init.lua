@@ -61,17 +61,13 @@ return {
     before = { "nvim-treesitter" },
   },
   ['nvim-treesitter/nvim-treesitter-textobjects'] = {
-    opt = true,
     before = { "nvim-treesitter" },
   },
   ["p00f/nvim-ts-rainbow"] = {
-    opt = true,
     before = { "nvim-treesitter" },
   },
   ["romgrk/nvim-treesitter-context"] = {
-    opt = true,
     before = { "nvim-treesitter" },
-    -- disable = true,
     config = function()
       require 'treesitter-context'.setup({
         enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)

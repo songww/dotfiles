@@ -21,62 +21,68 @@ M.comment = {
   end,
 }
 
-M.treesitter = {
-  ensure_installed = {
-    "c",
-    "cpp",
-    "go",
-    "rst",
-    "lua",
-    "tsx",
-    "vue",
-    "vim",
-    "css",
-    "scss",
-    "html",
-    "yaml",
-    "toml",
-    "rust",
-    "slint",
-    "json",
-    "jsonc",
-    "python",
-    "graphql",
-    "markdown",
-    "dockerfile",
-    "javascript",
-    "typescript",
-  },
-  indent = {
-    enable = true
-  },
-  rainbow = {
-    enable = true,
-  },
-  matchup = {
-    enable = true,
-  },
-  highlight = {
-    enable = true,
-    use_languagetree = true,
-  },
-  textobjects = {
-    select = {
+M.treesitter = function()
+  -- use a HTTP proxy for downloading the parsers
+  require("nvim-treesitter.install").command_extra_args = {
+    curl = { "--proxy", "http://127.0.0.1:1087" },
+  }
+  return {
+    ensure_installed = {
+      "c",
+      "cpp",
+      "go",
+      "rst",
+      "lua",
+      "tsx",
+      "vue",
+      "vim",
+      "css",
+      "scss",
+      "html",
+      "yaml",
+      "toml",
+      "rust",
+      "slint",
+      "json",
+      "jsonc",
+      "python",
+      "graphql",
+      "markdown",
+      "dockerfile",
+      "javascript",
+      "typescript",
+    },
+    indent = {
+      enable = true
+    },
+    rainbow = {
       enable = true,
     },
-    swap = {
+    matchup = {
       enable = true,
     },
-    move = {
+    highlight = {
       enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-    }
-  },
-  context_commentstring = {
-    enable = true,
-    enable_autocmd = false,
-  },
-}
+      use_languagetree = true,
+    },
+    textobjects = {
+      select = {
+        enable = true,
+      },
+      swap = {
+        enable = true,
+      },
+      move = {
+        enable = true,
+        set_jumps = true, -- whether to set jumps in the jumplist
+      }
+    },
+    context_commentstring = {
+      enable = true,
+      enable_autocmd = false,
+    },
+  }
+end
 
 M.bufferline = {
   options = {
