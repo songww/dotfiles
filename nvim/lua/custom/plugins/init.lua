@@ -57,7 +57,6 @@ return {
   --   end
   -- },
   ["JoosepAlviste/nvim-ts-context-commentstring"] = {
-    module = "ts_context_commentstring",
     before = { "nvim-treesitter" },
   },
   ['nvim-treesitter/nvim-treesitter-textobjects'] = {
@@ -311,8 +310,7 @@ return {
     end
   },
   ['ray-x/cmp-treesitter'] = {
-    opt = true,
-    requires = { 'hrsh7th/nvim-cmp' },
+    after = { 'nvim-cmp', 'nvim-treesitter' },
   },
   ['petertriho/cmp-git'] = {
     module = "cmp_git",
