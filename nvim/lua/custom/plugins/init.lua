@@ -66,6 +66,7 @@ return {
     before = { "nvim-treesitter" },
   },
   ["romgrk/nvim-treesitter-context"] = {
+    disable = true,
     before = { "nvim-treesitter" },
     config = function()
       require 'treesitter-context'.setup({
@@ -178,8 +179,17 @@ return {
   ["fladson/vim-kitty"] = {
     event = "BufRead *.conf",
   },
-  ['petobens/poet-v'] = {
-    ft = { "python" }
+  ['rafi/vim-venom'] = {
+    ft = { "python" },
+    setup = function()
+      vim.g.venom_loaded = 1 -- Before plugin loaded
+      vim.g.venom_use_tools = 1
+    end,
+    config = function()
+      require('venom').setup({
+        symbol = ''
+      }) -- After plugin loaded
+    end
   },
   ['simrat39/rust-tools.nvim'] = {
     opt = true,
@@ -289,8 +299,6 @@ return {
   },
   ['tzachar/cmp-tabnine'] = {
     run = './install.sh',
-    event = 'InsertEnter',
-    wants = 'nvim-cmp',
     after = { 'nvim-cmp' },
     requires = { 'hrsh7th/nvim-cmp' },
     config = function()
@@ -436,9 +444,8 @@ return {
     end
   },
   ['sindrets/diffview.nvim'] = {
-    disable = true,
-    event = "BufReadPost",
-    requires = { { 'nvim-lua/plenary.nvim', opt = true } },
+    cmd = { "DiffviewOpen", 'DiffviewFileHistory' },
+    requires = { { 'nvim-lua/plenary.nvim' } },
   },
   ['saecki/crates.nvim'] = {
     event = { "BufRead Cargo.toml" },

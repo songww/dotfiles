@@ -197,6 +197,9 @@ local options = function()
             autoClosingAngleBrackets = {
               enable = true
             }
+          },
+          procMacro = {
+            attributes = { enable = true },
           }
         }
       }

@@ -89,14 +89,12 @@ local M = {
     ["<C-x>"] = cmp.mapping.complete(),
     ["<Up>"] = cmp.mapping.select_prev_item(),
     ["<Down>"] = cmp.mapping.select_next_item(),
-    -- ["<Tab>"] = nil,
+    ["<CR>"] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    }),
   },
-  -- enabled = function()
-  --   return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
-  --       or require("cmp_dap").is_dap_buffer()
-  -- end,
   sources = {
-    -- {
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
     { name = "luasnip" },
