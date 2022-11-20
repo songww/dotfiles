@@ -14,41 +14,7 @@ M.ui = {
   hl_override = highlights,
 }
 
-M.options = {
-  user = function()
-    vim.opt.whichwrap = "<,>,[,],b,s"
-    vim.opt.backspace = "indent,eol,start"
-    vim.opt.signcolumn = "yes"
-    vim.opt.pumheight = 10
-    vim.opt.cursorline = true -- highlight the current line
-    vim.opt.wrap = false -- display lines as one long line
-    vim.opt.spell = false
-    vim.opt.number = true
-    vim.opt.relativenumber = true
-
-    vim.opt.fileencoding = "utf-8" -- the encoding written to a file
-    vim.opt.foldmethod = "manual" -- folding set to "expr" for treesitter based folding
-    vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- for treesitter based folding
-    vim.opt.splitbelow = true -- force all horizontal splits to go below current window
-    vim.opt.splitright = true -- force all vertical splits to go to the right of current window
-    vim.opt.swapfile = true -- creates a swapfile
-    vim.opt.title = true -- set the title of window to the value of the titlestring
-    vim.opt.undofile = false -- enable persistent undo
-    vim.opt.expandtab = true -- convert tabs to spaces
-
-    -- use filetype.lua instead of filetype.vim
-    vim.g.do_filetype_lua = 1
-    vim.g.did_load_filetypes = 0
-
-    vim.g.matchup_matchparen_enabled = 1
-    vim.g.matchup_matchparen_offscreen = { method = 'popup' }
-
-    vim.cmd([[
-      set cursorlineopt=both
-      set cursorcolumn
-    ]])
-  end
-}
+-- M.options = {}
 
 local userPlugins = require("custom.plugins")
 local pluginConfs = require("custom.plugins.configs")
@@ -61,9 +27,9 @@ M.plugins = {
   },
   override = {
     ["nvim-treesitter/nvim-treesitter"] = pluginConfs.treesitter,
-    ["williamboman/nvim-lsp-installer"] = pluginConfs.installer,
     ["ray-x/lsp_signature.nvim"] = pluginConfs.signature,
     ["akinsho/bufferline.nvim"] = pluginConfs.bufferline,
+    --[[ ["williamboman/mason.nvim"] = pluginConfs.installer, ]]
     ["folke/which-key.nvim"] = pluginConfs.whichkey,
     ["hrsh7th/nvim-cmp"] = function()
       return require("custom.plugins.configs.cmp")
@@ -71,12 +37,13 @@ M.plugins = {
     ["lewis6991/gitsigns.nvim"] = function()
       return require("custom.plugins.configs.gitsigns")
     end,
+
+    ["neovim/nvim-lspconfig"] = function()
+      require("plugins.configs.lspconfig")
+      require("custom.plugins.configs.lspconfig").setup()
+    end,
   },
-  options = {
-    lspconfig = {
-      setup_lspconf = "custom.plugins.configs.lspconfig"
-    }
-  },
+  -- options = {},
   user = userPlugins,
 }
 

@@ -47,7 +47,7 @@ M.sumneko_lua = {
   }
 }
 
-M.setup_lsp = function(attach, capabilities)
+M.setup = function(attach, capabilities)
   local lspconfig = require("lspconfig")
 
   local on_attach = function(client, bufnr)

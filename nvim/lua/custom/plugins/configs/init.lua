@@ -103,7 +103,7 @@ M.signature = {
 }
 
 M.installer = {
-  ensure_installed = { "sumneko_lua", "rust_analyzer", "pyright", "jsonls" },
+  ensure_installed = { "lua-language-server", "rust_analyzer", "pyright", "jsonls" },
   automatic_installation = false,
 }
 

@@ -255,6 +255,17 @@ return {
       require("custom.plugins.configs.null").setup()
     end,
   },
+  ["williamboman/mason.nvim"] = {
+    module = { "mason", "mason.core", "mason.registry" },
+  },
+  ["williamboman/mason-lspconfig.nvim"] = {
+    after = "nvim-lspconfig",
+    requires = { "williamboman/mason.nvim" },
+    config = function ()
+      require("mason").setup()
+      require("mason-lspconfig").setup(require("custom.plugins.configs").installer)
+    end
+  },
   ["mfussenegger/nvim-dap"] = {
     opt = true,
     module = "dap",
@@ -328,6 +339,9 @@ return {
     config = function()
       require("cmp_git").setup({})
     end
+  },
+  ["folke/which-key.nvim"] = {
+    disable = false,
   },
   ["mrjones2014/legendary.nvim"] = {
     opt = true,
